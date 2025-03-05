@@ -36,18 +36,26 @@ const createSession = async (userId) => {
 };
 
 export const registerUser = async (payload) => {
-  const user = await UsersCollection.findOne({ email: payload.email });
+  // Перевести email в нижній регістр перед перевіркою
+  const email = payload.email.toLowerCase();
+
+  const user = await UsersCollection.findOne({ email });
   if (user) throw createHttpError(409, 'Email in use');
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
   return await UsersCollection.create({
     ...payload,
+    email, // Зберігаємо email в нижньому регістрі
     password: encryptedPassword,
   });
 };
+
 export const loginUser = async (payload) => {
-  const user = await UsersCollection.findOne({ email: payload.email });
+  // Перевести email в нижній регістр перед перевіркою
+  const email = payload.email.toLowerCase();
+
+  const user = await UsersCollection.findOne({ email });
   if (!user) throw createHttpError(404, 'User not found');
 
   const isEqual = await bcrypt.compare(payload.password, user.password);
@@ -86,7 +94,51 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
   return await createSession(session.userId);
 };
 
+export const requestEmailVerificationToken = async (email) => {
+  // Перевести email в нижній регістр
+  email = email.toLowerCase();
+
+  const user = await UsersCollection.findOne({ email });
+  if (!user) throw createHttpError(404, 'User not found');
+
+  // Перевірка, чи користувач уже підтвердив свою пошту
+  if (user.isEmailVerified) {
+    throw createHttpError(400, 'Email already verified');
+  }
+
+  const verificationToken = jwt.sign(
+    { sub: user._id, email },
+    getEnvVar('JWT_SECRET'),
+    { expiresIn: '15m' },
+  );
+
+  const verificationEmailTemplatePath = path.join(
+    TEMPLATES_DIR,
+    'verify-email.html',
+  );
+
+  const templateSource = await fs.readFile(
+    verificationEmailTemplatePath,
+    'utf-8',
+  );
+  const template = handlebars.compile(templateSource);
+  const html = template({
+    name: user.name,
+    link: `${getEnvVar('APP_DOMAIN')}/verifycate?token=${verificationToken}`,
+  });
+
+  await sendEmail({
+    from: getEnvVar(SMTP.SMTP_FROM),
+    to: email,
+    subject: 'Verify your email',
+    html,
+  });
+};
+
 export const requestResetToken = async (email) => {
+  // Перевести email в нижній регістр
+  email = email.toLowerCase();
+
   const user = await UsersCollection.findOne({ email });
   if (!user) throw createHttpError(404, 'User not found');
 
