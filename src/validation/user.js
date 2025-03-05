@@ -12,12 +12,4 @@ export const updateUserValidationSchema = Joi.object({
   weight: Joi.number().min(0),
   dailySportTime: Joi.number().min(0),
   dailyNorm: Joi.number().min(500).max(15000),
-  avatarUrl: Joi.string().uri().optional(),
-});
-
-export const uploadAvatarValidationSchema = Joi.object({
-  avatar: Joi.object()
-    .valid('image/jpeg', 'image/png', 'image/jpg')
-    .uri()
-    .optional(),
 });
