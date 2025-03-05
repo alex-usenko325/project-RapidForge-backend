@@ -6,6 +6,7 @@ import {
   requestResetToken,
   resetPassword,
   loginOrSignupWithGoogle,
+  requestEmailVerificationToken,
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
@@ -77,6 +78,27 @@ export const refreshUserSessionController = async (req, res) => {
       accessToken: session.accessToken,
     },
   });
+};
+
+export const verifyEmailController = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Викликаємо функцію з сервісу для відправки листа з верифікацією
+    await requestEmailVerificationToken(email);
+
+    res.json({
+      message: 'Verification email was successfully sent!',
+      status: 200,
+      data: {},
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 400,
+      message: 'Error sending verification email.',
+      error: error.message,
+    });
+  }
 };
 
 export const requestResetEmailController = async (req, res) => {

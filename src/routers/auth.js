@@ -18,6 +18,7 @@ import {
   resetPasswordController,
   getGoogleOAuthUrlController,
   loginWithGoogleController,
+  verifyEmailController,
 } from '../controllers/auth.js';
 
 const authRouter = Router();
@@ -26,6 +27,12 @@ authRouter.post(
   '/register',
   validateBody(registerUserSchema),
   ctrlWrapper(registerUserController),
+);
+
+authRouter.post(
+  '/verifycate',
+  validateBody(requestResetEmailSchema), // перевірка схеми для верифікації
+  ctrlWrapper(verifyEmailController), // контролер для верифікації
 );
 
 authRouter.post(
