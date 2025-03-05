@@ -20,4 +20,4 @@ content:
           properties:
             message:
               type: string
-              example: 'User not found.'
+              example: 'The requested resource was not found.'
