@@ -7,6 +7,7 @@ import {
   resetPassword,
   loginOrSignupWithGoogle,
   requestEmailVerificationToken,
+  verifyEmail,
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
@@ -98,6 +99,22 @@ export const verifyEmailController = async (req, res) => {
       message: 'Error sending verification email.',
       error: error.message,
     });
+  }
+};
+
+export const emailVerificationController = async (req, res, next) => {
+  const { token } = req.params; // Отримуємо token з параметрів запиту
+
+  try {
+    // Викликаємо функцію verifyEmail, яка буде обробляти верифікацію
+    await verifyEmail(token);
+
+    res.json({
+      message: 'Email successfully verified!',
+      status: 200,
+    });
+  } catch (error) {
+    next(error); // Якщо виникає помилка, передаємо її далі
   }
 };
 

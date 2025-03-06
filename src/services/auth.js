@@ -48,6 +48,7 @@ export const registerUser = async (payload) => {
     ...payload,
     email, // Зберігаємо email в нижньому регістрі
     password: encryptedPassword,
+    isVerified: false, // Користувач ще не підтвердив email
   });
 };
 
@@ -55,14 +56,25 @@ export const loginUser = async (payload) => {
   // Перевести email в нижній регістр перед перевіркою
   const email = payload.email.toLowerCase();
 
+  // Знайти користувача в базі за email
   const user = await UsersCollection.findOne({ email });
+
+  // Якщо користувач не знайдений
   if (!user) throw createHttpError(404, 'User not found');
 
+  // Якщо користувач не верифікований, повертаємо помилку
+  if (!user.isVerified) {
+    throw createHttpError(403, 'Please verify your email first');
+  }
+
+  // Перевіряємо пароль
   const isEqual = await bcrypt.compare(payload.password, user.password);
   if (!isEqual) throw createHttpError(401, 'Unauthorized');
 
+  // Якщо користувач авторизований, видаляємо попередні сесії для цього користувача
   await SessionsCollection.deleteMany({ userId: user._id });
 
+  // Створюємо нову сесію для користувача
   return await createSession(user._id);
 };
 
@@ -102,7 +114,7 @@ export const requestEmailVerificationToken = async (email) => {
   if (!user) throw createHttpError(404, 'User not found');
 
   // Перевірка, чи користувач уже підтвердив свою пошту
-  if (user.isEmailVerified) {
+  if (user.isVerified) {
     throw createHttpError(400, 'Email already verified');
   }
 
@@ -133,6 +145,37 @@ export const requestEmailVerificationToken = async (email) => {
     subject: 'Verify your email',
     html,
   });
+};
+
+export const verifyEmail = async (req, res) => {
+  const { token } = req.query; // Токен, що передається через параметр запиту
+
+  try {
+    // Верифікація токена
+    const decoded = jwt.verify(token, getEnvVar('JWT_SECRET'));
+
+    // Знаходимо користувача за ID, який міститься в токені
+    const user = await UsersCollection.findById(decoded.sub);
+    if (!user) throw createHttpError(404, 'User not found');
+
+    // Перевіряємо, чи користувач вже підтвердив свою email адресу
+    if (user.isVerified) {
+      throw createHttpError(400, 'Email already verified');
+    }
+
+    // Оновлюємо статус користувача на підтверджений
+    user.isVerified = true;
+    await user.save(); // Зберігаємо зміни в базі
+
+    // Відповідь для користувача
+    res.json({
+      status: 200,
+      message: 'Email successfully verified',
+    });
+  } catch {
+    // Помилка при верифікації токена
+    throw createHttpError(400, 'Invalid or expired verification token');
+  }
 };
 
 export const requestResetToken = async (email) => {
