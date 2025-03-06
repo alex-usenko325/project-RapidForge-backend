@@ -11,8 +11,6 @@ import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 import swaggerDocs from './middlewares/swaggerDocs.js';
 
-import waterRouter from './routers/water.js';
-
 import { UPLOAD_DIR } from './constants/index.js';
 
 dotenv.config();
@@ -32,8 +30,6 @@ export const startServer = async () => {
   app.use('/api-docs', swaggerDocs());
 
   app.use('/', router);
-
-  app.use('/water', waterRouter);
 
   app.get('/', (_, res) => {
     res.send('Welcome to the server!');
