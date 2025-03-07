@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { addWaterRecord, updateWaterRecord } from '../services/water.js';
+import { addWaterRecord, updateWaterRecord, deleteWaterRecord } from '../services/water.js';
 
 export const updateWaterRecordController = async (req, res) => {
   const userId = req.user._id;
@@ -32,5 +32,21 @@ export const addWaterRecordController = async (req, res) => {
     status: 201,
     message: 'Water consumption record added successfully!',
     data: record,
+  });
+};
+
+export const deleteWaterRecordController = async (req, res) => {
+  const userId = req.user._id;
+  const { id: recordId } = req.params;
+
+  const deletedRecord = await deleteWaterRecord(userId, recordId);
+
+  if (!deletedRecord) {
+    throw createHttpError(404, 'Water consumption record not found');
+  }
+
+  res.json({
+    status: 200,
+    message: 'Water consumption record deleted successfully!',
   });
 };

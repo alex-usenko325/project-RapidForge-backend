@@ -19,3 +19,12 @@ export const updateWaterRecord = async (userId, recordId, updateData) => {
 
   return updatedRecord;
 };
+
+export const deleteWaterRecord = async (userId, recordId) => {
+  const deletedRecord = await waterCollection.findOneAndDelete({
+    _id: recordId,
+    userId: userId,
+  });
+
+  return deletedRecord;
+};

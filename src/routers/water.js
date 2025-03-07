@@ -5,8 +5,10 @@ import { createWaterRecordSchema } from '../validation/createWaterRecordSchema.j
 import {
   addWaterRecordController,
   updateWaterRecordController,
+  deleteWaterRecordController
 } from '../controllers/water.js';
 import { updateWaterRecordSchema } from '../validation/updateWaterRecordSchema.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
 
@@ -14,14 +16,17 @@ router.post(
   '/',
   authenticate,
   validateBody(createWaterRecordSchema),
-  addWaterRecordController,
+  ctrlWrapper(addWaterRecordController),
 );
 
 router.patch(
   '/:id',
   authenticate,
   validateBody(updateWaterRecordSchema),
-  updateWaterRecordController,
+  ctrlWrapper(updateWaterRecordController),
 );
+
+router.delete('/:id', authenticate, ctrlWrapper(deleteWaterRecordController));
+
 
 export default router;
