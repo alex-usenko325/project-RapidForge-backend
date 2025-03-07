@@ -47,3 +47,12 @@ export const getWaterToday = async (userId) => {
     date: { $gte: startDay, $lte: endDay },
   });
 };
+
+export const deleteWaterRecord = async (userId, recordId) => {
+  const deletedRecord = await waterCollection.findOneAndDelete({
+    _id: recordId,
+    userId: userId,
+  });
+
+  return deletedRecord;
+};

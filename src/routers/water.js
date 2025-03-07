@@ -6,25 +6,33 @@ import {
   addWaterRecordController,
   getWaterTodayController,
   updateWaterRecordController,
+  deleteWaterRecordController,
 } from '../controllers/water.js';
 import { updateWaterRecordSchema } from '../validation/updateWaterRecordSchema.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const waterRouter = Router();
-waterRouter.get('/today', authenticate, ctrlWrapper(getWaterTodayController));
 
 waterRouter.post(
   '/',
   authenticate,
   validateBody(createWaterRecordSchema),
-  addWaterRecordController,
+  ctrlWrapper(addWaterRecordController),
 );
+
+waterRouter.get('/today', authenticate, ctrlWrapper(getWaterTodayController));
 
 waterRouter.patch(
   '/:id',
   authenticate,
   validateBody(updateWaterRecordSchema),
-  updateWaterRecordController,
+  ctrlWrapper(updateWaterRecordController),
+);
+
+waterRouter.delete(
+  '/:id',
+  authenticate,
+  ctrlWrapper(deleteWaterRecordController),
 );
 
 export default waterRouter;
