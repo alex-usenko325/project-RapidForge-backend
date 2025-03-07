@@ -36,19 +36,100 @@ const createSession = async (userId) => {
 };
 
 export const registerUser = async (payload) => {
-  const user = await UsersCollection.findOne({ email: payload.email });
+  const email = payload.email.toLowerCase(); // Перевести email в нижній регістр
+  const user = await UsersCollection.findOne({ email });
   if (user) throw createHttpError(409, 'Email in use');
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
   return await UsersCollection.create({
     ...payload,
+    email, // Обов'язково записуємо email в нижньому регістрі
     password: encryptedPassword,
   });
 };
-export const loginUser = async (payload) => {
-  const user = await UsersCollection.findOne({ email: payload.email });
+
+export const requestEmailVerificationToken = async (email) => {
+  // Перевести email в нижній регістр
+  email = email.toLowerCase();
+
+  const user = await UsersCollection.findOne({ email });
   if (!user) throw createHttpError(404, 'User not found');
+
+  // Перевірка, чи користувач уже підтвердив свою пошту
+  if (user.isVerified) {
+    throw createHttpError(400, 'Email already verified');
+  }
+
+  const verificationToken = jwt.sign(
+    { sub: user._id, email },
+    getEnvVar('JWT_SECRET'),
+    { expiresIn: '15m' },
+  );
+
+  const verificationEmailTemplatePath = path.join(
+    TEMPLATES_DIR,
+    'verify-email.html',
+  );
+
+  const templateSource = await fs.readFile(
+    verificationEmailTemplatePath,
+    'utf-8',
+  );
+  const template = handlebars.compile(templateSource);
+  const html = template({
+    name: user.name,
+    link: `${getEnvVar('APP_DOMAIN')}/verifycate?token=${verificationToken}`,
+  });
+
+  await sendEmail({
+    from: getEnvVar(SMTP.SMTP_FROM),
+    to: email,
+    subject: 'Verify your email',
+    html,
+  });
+};
+
+export const verifyEmail = async (req, res) => {
+  const { token } = req.query; // Токен, що передається через параметр запиту
+
+  try {
+    // Верифікація токена
+    const decoded = jwt.verify(token, getEnvVar('JWT_SECRET'));
+
+    // Знаходимо користувача за ID, який міститься в токені
+    const user = await UsersCollection.findById(decoded.sub);
+    if (!user) throw createHttpError(404, 'User not found');
+
+    // Перевіряємо, чи користувач вже підтвердив свою email адресу
+    if (user.isVerified) {
+      throw createHttpError(400, 'Email already verified');
+    }
+
+    // Оновлюємо статус користувача на підтверджений
+    user.isVerified = true;
+    await user.save(); // Зберігаємо зміни в базі
+
+    // Відповідь для користувача
+    res.json({
+      status: 200,
+      message: 'Email successfully verified',
+    });
+  } catch {
+    // Помилка при верифікації токена
+    throw createHttpError(400, 'Invalid or expired verification token');
+  }
+};
+
+export const loginUser = async (payload) => {
+  const email = payload.email.toLowerCase(); // Перевести email в нижній регістр
+  const user = await UsersCollection.findOne({ email });
+  if (!user) throw createHttpError(404, 'User not found');
+
+  // Перевірка, чи email верифікований
+  if (!user.isVerified) {
+    throw createHttpError(401, 'Email not verified');
+  }
 
   const isEqual = await bcrypt.compare(payload.password, user.password);
   if (!isEqual) throw createHttpError(401, 'Unauthorized');

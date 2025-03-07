@@ -14,6 +14,7 @@ const usersSchema = new Schema(
       default:
         'https://res.cloudinary.com/diee7l1on/image/upload/v1741187439/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467_bvqe8k.avif',
     },
+    isVerified: { type: Boolean, default: false }, // Додано поле для верифікації email
   },
   { timestamps: true, versionKey: false },
 );
