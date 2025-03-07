@@ -5,28 +5,31 @@ import { createWaterRecordSchema } from '../validation/createWaterRecordSchema.j
 import {
   addWaterRecordController,
   updateWaterRecordController,
-  deleteWaterRecordController
+  deleteWaterRecordController,
 } from '../controllers/water.js';
 import { updateWaterRecordSchema } from '../validation/updateWaterRecordSchema.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
-const router = Router();
+const waterRouter = Router();
 
-router.post(
+waterRouter.post(
   '/',
   authenticate,
   validateBody(createWaterRecordSchema),
   ctrlWrapper(addWaterRecordController),
 );
 
-router.patch(
+waterRouter.patch(
   '/:id',
   authenticate,
   validateBody(updateWaterRecordSchema),
   ctrlWrapper(updateWaterRecordController),
 );
 
-router.delete('/:id', authenticate, ctrlWrapper(deleteWaterRecordController));
+waterRouter.delete(
+  '/:id',
+  authenticate,
+  ctrlWrapper(deleteWaterRecordController),
+);
 
-
-export default router;
+export default waterRouter;
