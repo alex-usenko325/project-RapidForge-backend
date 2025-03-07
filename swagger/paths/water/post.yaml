@@ -29,4 +29,4 @@ responses:
   '404':
     $ref: ../../components/responses/404-water.yaml
   '401':
-    $ref: ../../components/responses/401-auth.yaml
+    $ref: ../../components/responses/401.yaml
