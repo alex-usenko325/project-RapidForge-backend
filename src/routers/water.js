@@ -4,6 +4,7 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { createWaterRecordSchema } from '../validation/createWaterRecordSchema.js';
 import {
   addWaterRecordController,
+  getWaterTodayController,
   updateWaterRecordController,
   deleteWaterRecordController,
 } from '../controllers/water.js';
@@ -18,6 +19,8 @@ waterRouter.post(
   validateBody(createWaterRecordSchema),
   ctrlWrapper(addWaterRecordController),
 );
+
+waterRouter.get('/today', authenticate, ctrlWrapper(getWaterTodayController));
 
 waterRouter.patch(
   '/:id',
