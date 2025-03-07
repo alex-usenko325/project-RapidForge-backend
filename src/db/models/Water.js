@@ -8,7 +8,7 @@ const waterSchema = new Schema(
     date: { type: Date, required: true },
     volume: { type: Number, required: true },
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false },
 );
 
 export const waterCollection = model('water', waterSchema);

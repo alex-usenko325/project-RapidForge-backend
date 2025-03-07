@@ -2,14 +2,6 @@ import Joi from 'joi';
 import { isValidObjectId } from 'mongoose';
 
 export const registerUserSchema = Joi.object({
-  name: Joi.string().min(3).max(30).trim().required().messages({
-    'string.base': 'Name must be a string',
-    'string.empty': 'Name cannot be empty',
-    'string.min': 'Name must be at least 3 characters long',
-    'string.max': 'Name must be no longer than 30 characters',
-    'any.required': 'Name is required',
-  }),
-
   email: Joi.string().email().trim().required().messages({
     'string.base': 'Email must be a string',
     'string.email': 'Invalid email format',
