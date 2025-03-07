@@ -19,3 +19,31 @@ export const updateWaterRecord = async (userId, recordId, updateData) => {
 
   return updatedRecord;
 };
+
+export const getWaterToday = async (userId) => {
+  const nowUTC = new Date();
+  const startDay = new Date(
+    Date.UTC(
+      nowUTC.getUTCFullYear(),
+      nowUTC.getUTCMonth(),
+      nowUTC.getUTCDate(),
+      0,
+      0,
+      0,
+    ),
+  );
+  const endDay = new Date(
+    Date.UTC(
+      nowUTC.getUTCFullYear(),
+      nowUTC.getUTCMonth(),
+      nowUTC.getUTCDate(),
+      23,
+      59,
+      59,
+    ),
+  );
+  return await waterCollection.findOne({
+    userId,
+    date: { $gte: startDay, $lte: endDay },
+  });
+};

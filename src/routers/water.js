@@ -4,24 +4,27 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { createWaterRecordSchema } from '../validation/createWaterRecordSchema.js';
 import {
   addWaterRecordController,
+  getWaterTodayController,
   updateWaterRecordController,
 } from '../controllers/water.js';
 import { updateWaterRecordSchema } from '../validation/updateWaterRecordSchema.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
-const router = Router();
+const waterRouter = Router();
+waterRouter.get('/today', authenticate, ctrlWrapper(getWaterTodayController));
 
-router.post(
+waterRouter.post(
   '/',
   authenticate,
   validateBody(createWaterRecordSchema),
   addWaterRecordController,
 );
 
-router.patch(
+waterRouter.patch(
   '/:id',
   authenticate,
   validateBody(updateWaterRecordSchema),
   updateWaterRecordController,
 );
 
-export default router;
+export default waterRouter;

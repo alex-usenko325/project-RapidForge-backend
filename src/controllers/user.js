@@ -13,7 +13,7 @@ export const patchUserController = async (req, res, next) => {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(req.file.mimetype)) {
         return next(
-          createHttpError(400, 'Invalid file type. Allowed: jpeg, png, jpg')
+          createHttpError(400, 'Invalid file type. Allowed: jpeg, png, jpg'),
         );
       }
 
@@ -45,7 +45,7 @@ export const patchUserController = async (req, res, next) => {
 
 export const getUserByIdController = async (req, res, next) => {
   try {
-    const userId = req.params.userId; // або req.user._id, якщо отримуєте з токена
+    const userId = req.user._id;
 
     const user = await getUserById(userId);
     if (!user) {
@@ -54,6 +54,7 @@ export const getUserByIdController = async (req, res, next) => {
 
     res.json({
       status: 200,
+      message: 'The current user is found!',
       data: user,
     });
   } catch (error) {
@@ -72,7 +73,7 @@ export const patchAvatarController = async (req, res, next) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
     if (!allowedTypes.includes(req.file.mimetype)) {
       return next(
-        createHttpError(400, 'Invalid file type. Allowed: jpeg, png, jpg')
+        createHttpError(400, 'Invalid file type. Allowed: jpeg, png, jpg'),
       );
     }
 
