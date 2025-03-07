@@ -1,0 +1,32 @@
+tags:
+  - Water
+summary: Add a new water record
+operationId: waterRecord
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          date:
+            type: string
+            format: date
+            example: '2023-10-26'
+          volume:
+            type: number
+            example: 300
+description: Add a new water record for the authenticated user.
+responses:
+  '201':
+    description: Water record created successfully
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/waterRecord.yaml
+  '404':
+    $ref: ../../components/responses/404-water.yaml
+  '401':
+    $ref: ../../components/responses/401-auth.yaml

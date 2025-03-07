@@ -1,0 +1,30 @@
+type: object
+properties:
+  _id:
+    type: string
+    description: Water record ID
+  userId:
+    type: string
+    description: User ID
+  date:
+    type: string
+    format: date
+    description: Date of the water record
+  volume:
+    type: number
+    description: Volume of water (in ml)
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp of creation
+  updatedAt:
+    type: string
+    format: date-time
+    description: Timestamp of last update
+required:
+  - _id
+  - userId
+  - date
+  - volume
+  - createdAt
+  - updatedAt
