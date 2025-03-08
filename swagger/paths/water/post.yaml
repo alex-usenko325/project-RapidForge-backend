@@ -14,19 +14,50 @@ requestBody:
           date:
             type: string
             format: date
-            example: '2023-10-26'
+            example: '2025-03-08'
           volume:
             type: number
-            example: 300
+            example: 1.5
 description: Add a new water record for the authenticated user.
 responses:
   '201':
-    description: Water record created successfully
+    description: Water consumption record added successfully!
     content:
       application/json:
         schema:
-          $ref: ../../components/schemas/waterRecord.yaml
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Water consumption record added successfully!
+            data:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: '67c8bd45f00d5e3dbe8b4003'
+                date:
+                  type: string
+                  format: date-time
+                  example: '2025-03-08T00:00:00.000Z'
+                volume:
+                  type: number
+                  example: 1.5
+                _id:
+                  type: string
+                  example: '67ccb325af338eef52e65971'
+                createdAt:
+                  type: string
+                  format: date-time
+                  example: '2025-03-08T21:14:13.125Z'
+                updatedAt:
+                  type: string
+                  format: date-time
+                  example: '2025-03-08T21:14:13.125Z'
   '404':
-    $ref: ../../components/responses/404-water.yaml
+    $ref: '../../components/responses/404-water.yaml'
   '401':
-    $ref: ../../components/responses/401.yaml
+    $ref: '../../components/responses/401.yaml'

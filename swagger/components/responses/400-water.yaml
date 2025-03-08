@@ -20,4 +20,4 @@ content:
           properties:
             message:
               type: string
-              example: 'At least one field (date or volume) is required for update'
+              example: 'Date must be a valid date format'

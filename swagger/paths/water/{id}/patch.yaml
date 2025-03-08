@@ -21,10 +21,10 @@ requestBody:
           date:
             type: string
             format: date
-            example: '2023-10-27'
+            example: '2025-03-08'
           volume:
             type: number
-            example: 350
+            example: 1
 description: Update an existing water record for the authenticated user.
 responses:
   '200':
@@ -32,6 +32,48 @@ responses:
     content:
       application/json:
         schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully updated water record!
+            data:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: Water record ID
+                  example: '67c8c91a87552ae16ccaced9'
+                userId:
+                  type: string
+                  description: User ID
+                  example: '67c8bd45f00d5e3dbe8b4003'
+                date:
+                  type: string
+                  format: date-time
+                  description: Date of the water record
+                  example: '2025-02-20T00:00:00.000Z'
+                volume:
+                  type: number
+                  description: Volume of water (in ml)
+                  example: 2
+                createdAt:
+                  type: string
+                  format: date-time
+                  description: Timestamp of creation
+                  example: '2025-03-05T21:58:50.582Z'
+                updatedAt:
+                  type: string
+                  format: date-time
+                  description: Timestamp of last update
+                  example: '2025-03-08T21:25:44.380Z'
+                __v:
+                  type: integer
+                  description: Version key
+                  example: 0
           $ref: ../../../components/schemas/waterRecord.yaml
   '400':
     $ref: ../../../components/responses/400-water.yaml
