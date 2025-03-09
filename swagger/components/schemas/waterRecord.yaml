@@ -10,21 +10,15 @@ properties:
     type: string
     format: date
     description: Date of the water record
+  time:
+    type: string
+    description: Time of the water record
   volume:
     type: number
     description: Volume of water (in ml)
-  createdAt:
-    type: string
-    format: date-time
-    description: Timestamp of creation
-  updatedAt:
-    type: string
-    format: date-time
-    description: Timestamp of last update
 required:
   - _id
   - userId
   - date
+  - time
   - volume
-  - createdAt
-  - updatedAt

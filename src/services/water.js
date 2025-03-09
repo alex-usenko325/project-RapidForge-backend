@@ -1,12 +1,15 @@
 import { waterCollection } from '../db/models/Water.js';
 import createHttpError from 'http-errors';
 
-export const addWaterRecord = async ({ userId, date, volume }) => {
-  const record = await waterCollection.create({ userId, date, volume });
+export const addWaterRecord = async ({ userId, date, time, volume }) => {
+  const record = await waterCollection.create({ userId, date, time, volume });
   return record;
 };
 
 export const updateWaterRecord = async (userId, recordId, updateData) => {
+  // if (updateData.data || updateData.time) {
+  //   throw createHttpError(400, 'Updating date or time is not allowed');
+  // }
   const updatedRecord = await waterCollection.findOneAndUpdate(
     { _id: recordId, userId },
     updateData,

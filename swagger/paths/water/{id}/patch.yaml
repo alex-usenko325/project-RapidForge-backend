@@ -21,11 +21,17 @@ requestBody:
           date:
             type: string
             format: date
+            description: Date of the water record
             example: '2025-03-08'
+          time:
+            type: string
+            format: time
+            description: Time of the water record
+            example: '12:00'
           volume:
             type: number
+            description: Volume of water (in ml)
             example: 1
-description: Update an existing water record for the authenticated user.
 responses:
   '200':
     description: Successfully updated water record
@@ -33,6 +39,10 @@ responses:
       application/json:
         schema:
           type: object
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
@@ -42,38 +52,6 @@ responses:
               example: Successfully updated water record!
             data:
               type: object
-              properties:
-                _id:
-                  type: string
-                  description: Water record ID
-                  example: '67c8c91a87552ae16ccaced9'
-                userId:
-                  type: string
-                  description: User ID
-                  example: '67c8bd45f00d5e3dbe8b4003'
-                date:
-                  type: string
-                  format: date-time
-                  description: Date of the water record
-                  example: '2025-02-20T00:00:00.000Z'
-                volume:
-                  type: number
-                  description: Volume of water (in ml)
-                  example: 2
-                createdAt:
-                  type: string
-                  format: date-time
-                  description: Timestamp of creation
-                  example: '2025-03-05T21:58:50.582Z'
-                updatedAt:
-                  type: string
-                  format: date-time
-                  description: Timestamp of last update
-                  example: '2025-03-08T21:25:44.380Z'
-                __v:
-                  type: integer
-                  description: Version key
-                  example: 0
           $ref: ../../../components/schemas/waterRecord.yaml
   '400':
     $ref: ../../../components/responses/400-water.yaml
