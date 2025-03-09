@@ -6,6 +6,19 @@ import {
   deleteWaterRecord,
 } from '../services/water.js';
 
+export const addWaterRecordController = async (req, res) => {
+  const userId = req.user._id;
+  const { date, time, volume } = req.body;
+
+  const record = await addWaterRecord({ userId, date, time, volume });
+
+  res.status(201).json({
+    status: 201,
+    message: 'Water consumption record added successfully!',
+    data: record,
+  });
+};
+
 export const updateWaterRecordController = async (req, res) => {
   const userId = req.user._id;
   const { id: recordId } = req.params;
@@ -24,19 +37,6 @@ export const updateWaterRecordController = async (req, res) => {
     status: 200,
     message: 'Successfully updated water record!',
     data: updatedRecord,
-  });
-};
-
-export const addWaterRecordController = async (req, res) => {
-  const userId = req.user._id;
-  const { date, volume } = req.body;
-
-  const record = await addWaterRecord({ userId, date, volume });
-
-  res.status(201).json({
-    status: 201,
-    message: 'Water consumption record added successfully!',
-    data: record,
   });
 };
 
