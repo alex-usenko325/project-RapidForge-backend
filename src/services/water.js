@@ -42,9 +42,21 @@ export const getWaterToday = async (userId) => {
       59,
     ),
   );
-  return await waterCollection.findOne({
+
+  return await waterCollection.find({
     userId,
     date: { $gte: startDay, $lte: endDay },
+  });
+};
+
+export const getWaterForMonth = async (userId, year, month) => {
+  const startMonth = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
+
+  const endMonth = new Date(Date.UTC(year, month, 0, 23, 59, 59));
+
+  return await waterCollection.find({
+    userId,
+    date: { $gte: startMonth, $lte: endMonth },
   });
 };
 

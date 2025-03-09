@@ -4,6 +4,7 @@ import {
   getWaterToday,
   updateWaterRecord,
   deleteWaterRecord,
+  getWaterForMonth,
 } from '../services/water.js';
 
 export const updateWaterRecordController = async (req, res) => {
@@ -40,6 +41,26 @@ export const addWaterRecordController = async (req, res) => {
   });
 };
 
+// export const addWaterRecordController = async (req, res) => {
+//   const userId = req.user._id;
+//   if (!userId) {
+//     throw createHttpError(401, 'Unauthorized: User not found');
+//   }
+
+//   let { date, volume } = req.body;
+
+//   const parsedDate = new Date(
+//     date.split('.').reverse().join('-'),
+//   ).toISOString();
+//   const record = await addWaterRecord({ userId, date: parsedDate, volume });
+
+//   res.status(201).json({
+//     status: 201,
+//     message: 'Water consumption record added successfully!',
+//     data: record,
+//   });
+// };
+
 export const getWaterTodayController = async (req, res) => {
   const userId = req.user._id;
   if (!userId) {
@@ -59,6 +80,52 @@ export const getWaterTodayController = async (req, res) => {
     status: 200,
     message: 'Water consumption data retrieved successfully',
     data: waterData,
+  });
+};
+
+export const getWaterForMonthController = async (req, res) => {
+  const userId = req.user._id;
+  if (!userId) {
+    throw createHttpError(401, 'Unauthorized: User not found');
+  }
+
+  const { year, month } = req.query;
+
+  //Convert year and month to number
+  const parsedYear = parseInt(year, 10);
+  const parsedMonth = parseInt(month, 10);
+
+  // Checking if values are correct
+  if (
+    isNaN(parsedYear) ||
+    isNaN(parsedMonth) ||
+    parsedMonth < 1 ||
+    parsedMonth > 12
+  ) {
+    return res.status(400).json({
+      status: 400,
+      message: 'Invalid year or month',
+    });
+  }
+
+  const monthWaterData = await getWaterForMonth(
+    userId,
+    parsedYear,
+    parsedMonth,
+  );
+
+  if (!monthWaterData || monthWaterData.length === 0) {
+    return res.json({
+      status: 200,
+      message: `No water consumption data found for requested month ${parsedYear}-${parsedMonth}`,
+      data: {},
+    });
+  }
+
+  res.json({
+    status: 200,
+    message: `Water consumption data for requested month ${parsedYear}-${parsedMonth} retrieved successfully`,
+    data: monthWaterData,
   });
 };
 
