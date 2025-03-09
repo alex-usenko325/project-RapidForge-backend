@@ -21,7 +21,12 @@ export const startServer = async () => {
   const app = express();
 
   app.use(express.json());
-  app.use(cors());
+  app.use(cors({
+  origin: '*', // Дозволяє доступ з усіх доменів
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Дозволяє певні HTTP методи
+  allowedHeaders: ['Content-Type', 'Authorization'], // Дозволяє певні заголовки
+  credentials: true, // Дозволяє передавати cookies та інші приватні дані
+}));
   app.use(cookieParser());
 
   await initMongoDB();
