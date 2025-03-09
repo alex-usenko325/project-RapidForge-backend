@@ -79,7 +79,7 @@ export const requestEmailVerificationToken = async (email) => {
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${getEnvVar('APP_DOMAIN')}/verifycate?token=${verificationToken}`,
+    link: `${getEnvVar('APP_DOMAIN')}/verification?token=${verificationToken}`,
   });
 
   await sendEmail({
