@@ -15,7 +15,7 @@ tags:
     description: Operations about water records.
 servers:
   - url: http://localhost:3000
-  - url: https://example.com/api/v1
+  - url: https://aqua-track-app.onrender.com
 paths:
   /auth/register:
     post:
