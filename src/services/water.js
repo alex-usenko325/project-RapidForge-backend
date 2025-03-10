@@ -37,6 +37,7 @@ export const getWaterToday = async (userId) => {
   )
     .toISOString()
     .split('T')[0];
+
   const endDay = new Date(
     Date.UTC(
       nowUTC.getUTCFullYear(),
@@ -49,6 +50,7 @@ export const getWaterToday = async (userId) => {
   )
     .toISOString()
     .split('T')[0];
+
   return await waterCollection.find({
     userId,
     date: { $gte: startDay, $lte: endDay },
@@ -56,9 +58,11 @@ export const getWaterToday = async (userId) => {
 };
 
 export const getWaterForMonth = async (userId, year, month) => {
-  const startMonth = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
+  const startMonth = new Date(
+    Date.UTC(year, month - 1, 1, 0, 0, 0),
+  ).toISOString();
 
-  const endMonth = new Date(Date.UTC(year, month, 0, 23, 59, 59));
+  const endMonth = new Date(Date.UTC(year, month, 0, 23, 59, 59)).toISOString();
 
   return await waterCollection.find({
     userId,

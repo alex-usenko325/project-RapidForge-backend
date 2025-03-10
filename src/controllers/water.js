@@ -25,11 +25,8 @@ export const updateWaterRecordController = async (req, res) => {
   const { id: recordId } = req.params;
   const updateData = req.body;
 
-  if (!updateData.date && !updateData.volume) {
-    throw createHttpError(
-      400,
-      'At least one field (date or volume) is required for update',
-    );
+  if (!updateData.date && !updateData.volume && !updateData.time) {
+    throw createHttpError(400, 'At least one field is required for update');
   }
 
   const updatedRecord = await updateWaterRecord(userId, recordId, updateData);
@@ -65,10 +62,6 @@ export const getWaterTodayController = async (req, res) => {
 
 export const getWaterForMonthController = async (req, res) => {
   const userId = req.user._id;
-  if (!userId) {
-    throw createHttpError(401, 'Unauthorized: User not found');
-  }
-
   const { year, month } = req.query;
 
   //Convert year and month to number
@@ -119,8 +112,5 @@ export const deleteWaterRecordController = async (req, res) => {
     throw createHttpError(404, 'Water consumption record not found');
   }
 
-  res.json({
-    status: 200,
-    message: 'Water consumption record deleted successfully!',
-  });
+  res.status(204).send();
 };
