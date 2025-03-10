@@ -33,8 +33,8 @@ export const getWaterToday = async (userId) => {
       0,
       0,
       0,
-    ),
-  );
+    )
+  ).toISOString().split('T')[0]; 
   const endDay = new Date(
     Date.UTC(
       nowUTC.getUTCFullYear(),
@@ -43,11 +43,11 @@ export const getWaterToday = async (userId) => {
       23,
       59,
       59,
-    ),
-  );
-  return await waterCollection.findOne({
+    )
+  ).toISOString().split('T')[0]; 
+  return await waterCollection.find({
     userId,
-    date: { $gte: startDay, $lte: endDay },
+    date: { $gte: startDay, $lte: endDay }, 
   });
 };
 
@@ -59,3 +59,4 @@ export const deleteWaterRecord = async (userId, recordId) => {
 
   return deletedRecord;
 };
+
