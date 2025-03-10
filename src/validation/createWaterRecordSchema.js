@@ -1,9 +1,13 @@
 import Joi from 'joi';
 
 export const createWaterRecordSchema = Joi.object({
-  date: Joi.date().required().messages({
+  date: Joi.string().required().messages({
     'any.required': 'Date is required',
-    'date.base': 'Date must be a valid date format',
+    'date.base': 'Date must be a string',
+  }),
+  time: Joi.string().required().messages({
+    'any.required': 'Time is required',
+    'string.base': 'Time must be a string',
   }),
   volume: Joi.number().positive().required().messages({
     'any.required': 'Volume is required',

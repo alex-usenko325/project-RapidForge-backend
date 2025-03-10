@@ -2,7 +2,7 @@ import createHttpError from 'http-errors';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
-import { updateUser, getUserById } from '../services/user.js';
+import { updateUser, getUserById, countUser } from '../services/user.js';
 
 export const patchUserController = async (req, res, next) => {
   try {
@@ -94,6 +94,19 @@ export const patchAvatarController = async (req, res, next) => {
       status: 200,
       message: 'Avatar successfully updated!',
       data: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUsersCountController = async (req, res, next) => {
+  try {
+    const count = await countUser();
+    res.json({
+      status: 200,
+      message: 'Total number of registered users',
+      data: count,
     });
   } catch (error) {
     next(error);

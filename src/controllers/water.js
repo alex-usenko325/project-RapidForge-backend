@@ -7,6 +7,19 @@ import {
   getWaterForMonth,
 } from '../services/water.js';
 
+export const addWaterRecordController = async (req, res) => {
+  const userId = req.user._id;
+  const { date, time, volume } = req.body;
+
+  const record = await addWaterRecord({ userId, date, time, volume });
+
+  res.status(201).json({
+    status: 201,
+    message: 'Water consumption record added successfully!',
+    data: record,
+  });
+};
+
 export const updateWaterRecordController = async (req, res) => {
   const userId = req.user._id;
   const { id: recordId } = req.params;
@@ -27,39 +40,6 @@ export const updateWaterRecordController = async (req, res) => {
     data: updatedRecord,
   });
 };
-
-export const addWaterRecordController = async (req, res) => {
-  const userId = req.user._id;
-  const { date, volume } = req.body;
-
-  const record = await addWaterRecord({ userId, date, volume });
-
-  res.status(201).json({
-    status: 201,
-    message: 'Water consumption record added successfully!',
-    data: record,
-  });
-};
-
-// export const addWaterRecordController = async (req, res) => {
-//   const userId = req.user._id;
-//   if (!userId) {
-//     throw createHttpError(401, 'Unauthorized: User not found');
-//   }
-
-//   let { date, volume } = req.body;
-
-//   const parsedDate = new Date(
-//     date.split('.').reverse().join('-'),
-//   ).toISOString();
-//   const record = await addWaterRecord({ userId, date: parsedDate, volume });
-
-//   res.status(201).json({
-//     status: 201,
-//     message: 'Water consumption record added successfully!',
-//     data: record,
-//   });
-// };
 
 export const getWaterTodayController = async (req, res) => {
   const userId = req.user._id;
