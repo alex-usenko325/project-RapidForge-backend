@@ -390,7 +390,7 @@
         "tags": [
           "Water"
         ],
-        "summary": "Get water consumption data for today",
+        "summary": "Get water data for today",
         "operationId": "getWaterToday",
         "security": [
           {
