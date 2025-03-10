@@ -7,6 +7,7 @@ import {
   getWaterTodayController,
   updateWaterRecordController,
   deleteWaterRecordController,
+  getWaterForMonthController,
 } from '../controllers/water.js';
 import { updateWaterRecordSchema } from '../validation/updateWaterRecordSchema.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -21,6 +22,12 @@ waterRouter.post(
 );
 
 waterRouter.get('/today', authenticate, ctrlWrapper(getWaterTodayController));
+
+waterRouter.get(
+  '/month',
+  authenticate,
+  ctrlWrapper(getWaterForMonthController),
+);
 
 waterRouter.patch(
   '/:id',
