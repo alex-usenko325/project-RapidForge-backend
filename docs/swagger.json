@@ -1,4 +1,3 @@
-
 {
   "openapi": "3.1.0",
   "info": {
@@ -87,6 +86,9 @@
           },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
@@ -151,11 +153,77 @@
           "401": {
             "$ref": "#/components/responses/401-auth"
           },
-          "404": {
-            "$ref": "#/components/responses/401"
-          },
           "409": {
             "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/verify/{token}": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Verify email",
+        "operationId": "verifyEmail",
+        "description": "Verifies the user's email address using the provided token.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Verification token received in the email."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "status",
+                    "data"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email successfully verified!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400-verify-token"
+          },
+          "401": {
+            "$ref": "#/components/responses/401-auth"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -259,11 +327,137 @@
           "401": {
             "$ref": "#/components/responses/401"
           },
-          "500": null
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/requestEmailVerification": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Request email verification",
+        "operationId": "requestEmailVerification",
+        "description": "Sends an email with a verification token to the user's email address.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification email sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "status",
+                    "data"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Verification email was successfully sent!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400-verify"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
         }
       }
     },
     "/water": {
+      "get": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Get water consumption data for today",
+        "operationId": "getWaterToday",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Water consumption data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Water consumption data retrieved successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/waterRecord"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Water consumption data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No water consumption data found for today"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-water"
+          }
+        }
+      },
       "post": {
         "tags": [
           "Water"
@@ -281,22 +475,34 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "date",
+                  "time",
+                  "volume"
+                ],
                 "properties": {
                   "date": {
                     "type": "string",
                     "format": "date",
+                    "description": "Date of the water record",
                     "example": "2025-03-08"
                   },
                   "volume": {
                     "type": "number",
+                    "description": "Volume of water (in ml)",
                     "example": 1.5
+                  },
+                  "time": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "Time of the water record",
+                    "example": "10:30"
                   }
                 }
               }
             }
           }
         },
-        "description": "Add a new water record for the authenticated user.",
         "responses": {
           "201": {
             "description": "Water consumption record added successfully!",
@@ -304,6 +510,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -314,36 +525,7 @@
                       "example": "Water consumption record added successfully!"
                     },
                     "data": {
-                      "type": "object",
-                      "properties": {
-                        "userId": {
-                          "type": "string",
-                          "example": "67c8bd45f00d5e3dbe8b4003"
-                        },
-                        "date": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": "2025-03-08T00:00:00.000Z"
-                        },
-                        "volume": {
-                          "type": "number",
-                          "example": 1.5
-                        },
-                        "_id": {
-                          "type": "string",
-                          "example": "67ccb325af338eef52e65971"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": "2025-03-08T21:14:13.125Z"
-                        },
-                        "updatedAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": "2025-03-08T21:14:13.125Z"
-                        }
-                      }
+                      "type": "object"
                     }
                   }
                 }
@@ -392,10 +574,18 @@
                   "date": {
                     "type": "string",
                     "format": "date",
+                    "description": "Date of the water record",
                     "example": "2025-03-08"
+                  },
+                  "time": {
+                    "type": "string",
+                    "format": "time",
+                    "description": "Time of the water record",
+                    "example": "12:00"
                   },
                   "volume": {
                     "type": "number",
+                    "description": "Volume of water (in ml)",
                     "example": 1
                   }
                 }
@@ -403,7 +593,6 @@
             }
           }
         },
-        "description": "Update an existing water record for the authenticated user.",
         "responses": {
           "200": {
             "description": "Successfully updated water record",
@@ -411,6 +600,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -421,47 +615,7 @@
                       "example": "Successfully updated water record!"
                     },
                     "data": {
-                      "type": "object",
-                      "properties": {
-                        "_id": {
-                          "type": "string",
-                          "description": "Water record ID",
-                          "example": "67c8c91a87552ae16ccaced9"
-                        },
-                        "userId": {
-                          "type": "string",
-                          "description": "User ID",
-                          "example": "67c8bd45f00d5e3dbe8b4003"
-                        },
-                        "date": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Date of the water record",
-                          "example": "2025-02-20T00:00:00.000Z"
-                        },
-                        "volume": {
-                          "type": "number",
-                          "description": "Volume of water (in ml)",
-                          "example": 2
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Timestamp of creation",
-                          "example": "2025-03-05T21:58:50.582Z"
-                        },
-                        "updatedAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "description": "Timestamp of last update",
-                          "example": "2025-03-08T21:25:44.380Z"
-                        },
-                        "__v": {
-                          "type": "integer",
-                          "description": "Version key",
-                          "example": 0
-                        }
-                      }
+                      "type": "object"
                     }
                   },
                   "$ref": "#/components/schemas/waterRecord"
@@ -471,6 +625,61 @@
           },
           "400": {
             "$ref": "#/components/responses/400-water"
+          },
+          "404": {
+            "$ref": "#/components/responses/404-water"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Delete a water record",
+        "operationId": "deleteWaterRecord",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the water record to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Water consumption record deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Water consumption record deleted successfully!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404-water"
@@ -538,18 +747,6 @@
             "description": "User's ID",
             "type": "string",
             "example": "67cc5bb27a2222d660c179f9"
-          },
-          "createdAt": {
-            "description": "User's creation date",
-            "type": "string",
-            "format": "date-time",
-            "example": "2025-03-08T15:01:06.308Z"
-          },
-          "updatedAt": {
-            "description": "User's last update date",
-            "type": "string",
-            "format": "date-time",
-            "example": "2025-03-08T15:01:06.308Z"
           }
         }
       },
@@ -588,28 +785,21 @@
             "format": "date",
             "description": "Date of the water record"
           },
+          "time": {
+            "type": "string",
+            "description": "Time of the water record"
+          },
           "volume": {
             "type": "number",
             "description": "Volume of water (in ml)"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp of creation"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp of last update"
           }
         },
         "required": [
           "_id",
           "userId",
           "date",
-          "volume",
-          "createdAt",
-          "updatedAt"
+          "time",
+          "volume"
         ]
       }
     },
@@ -687,6 +877,42 @@
           }
         }
       },
+      "404": {
+        "description": "Not found error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "NotFoundError"
+                },
+                "details": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The requested resource was not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "409": {
         "description": "Conflict error",
         "content": {
@@ -725,37 +951,24 @@
         }
       },
       "500": {
-        "500": {
-          "description": "Server Error",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "status",
-                  "message"
-                ],
-                "properties": {
-                  "status": {
-                    "type": "integer",
-                    "example": 500
-                  },
-                  "message": {
-                    "type": "string",
-                    "example": "InternalServerError"
-                  },
-                  "details": {
-                    "type": "object",
-                    "required": [
-                      "message"
-                    ],
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "An unexpected error server."
-                      }
-                    }
-                  }
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Internal server error"
+                },
+                "details": {
+                  "type": "string",
+                  "description": "Optional details about the error.",
+                  "example": "Internal server error"
                 }
               }
             }
@@ -793,6 +1006,46 @@
                       "example": "Unauthorized"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400-verify-token": {
+        "description": "Bad Request - Invalid or expired verification token",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Invalid or expired verification token"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                }
+              }
+            }
+          }
+        }
+      },
+      "400-verify": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Bad request - Something went wrong while sending verification email"
                 }
               }
             }

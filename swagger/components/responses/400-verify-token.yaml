@@ -1,0 +1,12 @@
+description: Bad Request - Invalid or expired verification token
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Invalid or expired verification token
+        status:
+          type: integer
+          example: 400

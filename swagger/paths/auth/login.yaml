@@ -39,3 +39,5 @@ responses:
     $ref: ../../components/responses/401-auth.yaml
   '409':
     $ref: ../../components/responses/409.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml
