@@ -7,9 +7,9 @@ import {
   patchAvatarController,
   patchUserController,
   getUserByIdController,
+  getUsersCountController,
 } from '../controllers/user.js';
 import { upload } from '../middlewares/multer.js';
-
 
 const userRouter = Router();
 userRouter.get(
@@ -31,4 +31,5 @@ userRouter.patch(
   ctrlWrapper(patchAvatarController),
 );
 
+userRouter.get('/usersCount', ctrlWrapper(getUsersCountController));
 export default userRouter;
