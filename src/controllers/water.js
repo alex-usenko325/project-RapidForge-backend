@@ -6,7 +6,6 @@ import {
   deleteWaterRecord,
   getWaterForMonth,
 } from '../services/water.js';
-// import { waterCollection } from '../db/models/Water.js';
 
 export const addWaterRecordController = async (req, res) => {
   const userId = req.user._id;
