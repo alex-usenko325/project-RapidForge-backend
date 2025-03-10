@@ -9,7 +9,12 @@ export const updateUser = async (userId, payload) => {
   const updatedUser = await UsersCollection.findOneAndUpdate(
     { _id: userId },
     { $set: payload },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
   return updatedUser;
+};
+
+export const countUser = async () => {
+  const userCount = await UsersCollection.countDocuments();
+  return userCount;
 };

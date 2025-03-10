@@ -39,13 +39,3 @@ properties:
     description: "User's ID"
     type: string
     example: '67cc5bb27a2222d660c179f9'
-  createdAt:
-    description: "User's creation date"
-    type: string
-    format: date-time
-    example: '2025-03-08T15:01:06.308Z'
-  updatedAt:
-    description: "User's last update date"
-    type: string
-    format: date-time
-    example: '2025-03-08T15:01:06.308Z'
