@@ -11,31 +11,3 @@ properties:
     description: "User's password"
     type: string
     example: 'password12345!'
-  gender:
-    description: "User's gender"
-    type: string
-    example: 'woman'
-  weight:
-    description: "User's weight"
-    type: integer
-    example: 0
-  dailySportTime:
-    description: "User's daily sport time"
-    type: integer
-    example: 0
-  dailyNorm:
-    description: "User's daily norm"
-    type: integer
-    example: 1500
-  avatar:
-    description: "User's avatar URL"
-    type: string
-    example: 'https://res.cloudinary.com/diee7l1on/image/upload/v1741187439/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467_bvqe8k.avif'
-  isVerified:
-    description: "User's verification status"
-    type: boolean
-    example: false
-  _id:
-    description: "User's ID"
-    type: string
-    example: '67cc5bb27a2222d660c179f9'

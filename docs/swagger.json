@@ -84,9 +84,6 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
-          "409": {
-            "$ref": "#/components/responses/409"
-          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -390,7 +387,7 @@
         "tags": [
           "Water"
         ],
-        "summary": "Get water consumption data for today",
+        "summary": "Get water data for today",
         "operationId": "getWaterToday",
         "security": [
           {

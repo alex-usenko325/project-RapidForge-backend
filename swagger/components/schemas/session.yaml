@@ -1,0 +1,25 @@
+type: object
+properties:
+  userId:
+    type: string
+    description: User ID
+  accessToken:
+    type: string
+    description: Access token
+  refreshToken:
+    type: string
+    description: Refresh token
+  accessTokenValidUntil:
+    type: string
+    format: date-time
+    description: Access token expiration date and time
+  refreshTokenValidUntil:
+    type: string
+    format: date-time
+    description: Refresh token expiration date and time
+required:
+  - userId
+  - accessToken
+  - refreshToken
+  - accessTokenValidUntil
+  - refreshTokenValidUntil
