@@ -30,7 +30,7 @@ export const startServer = async () => {
     cors({
       origin: [
         'http://localhost:5174',
-        'https://project-node-react-frontend.vercel.app/',
+        'https://project-node-react-frontend.vercel.app',
       ], // Дозволяє доступ з цих доменів
       credentials: true, // Дозволяє передавати cookies та інші приватні дані
     }),
