@@ -14,11 +14,12 @@ content:
         message:
           type: string
           example: UnauthorizedError
-        details:
+        data:
           type: object
-          required:
-            - message
+          oneOf:
+            - type: 'null'
+            - type: 'object'
           properties:
             message:
               type: string
-              example: 'Invalid or expired access token. Please log in again.'
+              example: 'Invalid or expired access token.'

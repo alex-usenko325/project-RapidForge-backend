@@ -1,0 +1,51 @@
+tags:
+  - Auth
+summary: Reset user password
+operationId: resetPassword
+description: Resets the user's password. Requires a valid reset token and the new password.
+security:
+  - bearerAuth: []
+requestBody:
+  description: Password reset data
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - token
+          - password
+        properties:
+          token:
+            type: string
+            description: 'Reset token received via email'
+            example: 'your_reset_token'
+          password:
+            type: string
+            description: 'New password'
+            example: 'NewPassword123!'
+  responses:
+    '200':
+      description: Password reset successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Password was successfully reset!'
+              status:
+                type: integer
+                example: 200
+              data:
+                type: object
+                example: {}
+    '400':
+      $ref: '../../components/responses/400.yaml'
+    '401':
+      $ref: '../../components/responses/401.yaml'
+    '404':
+      $ref: '../../components/responses/404.yaml'
+    '500':
+      $ref: '../../components/responses/500.yaml'

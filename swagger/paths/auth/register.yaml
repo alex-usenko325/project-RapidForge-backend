@@ -2,7 +2,7 @@ tags:
   - Auth
 summary: Register a new user
 operationId: registerUser
-description: 'Creates a new user account and returns a success message.'
+description: 'Creates a new user account and returns email and  authentication token.'
 security:
   - bearerAuth: []
 requestBody:
@@ -11,7 +11,19 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: ../../components/schemas/register.yaml
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            description: "User's email"
+            type: string
+            example: 'testemail@gmail.com'
+          password:
+            description: "User's password"
+            type: string
+            example: 'password12345!'
 responses:
   '201':
     description: Registered a user
@@ -24,11 +36,26 @@ responses:
             - message
             - data
           properties:
+            status:
+              type: integer
+              example: 201
             message:
               type: string
               example: Successfully registered a new user!
             data:
-              $ref: ../../components/schemas/register.yaml
+              type: object
+              required:
+                - email
+                - token
+              properties:
+                email:
+                  description: "User's email"
+                  type: string
+                  example: 'testemail@gmail.com'
+                token:
+                  description: 'Authentication token'
+                  type: string
+                  example: 'bseDlf/Chq0dMG6c6o194qTqA6KaFeMMt6lJZOhp'
   '400':
     $ref: ../../components/responses/400.yaml
   '500':

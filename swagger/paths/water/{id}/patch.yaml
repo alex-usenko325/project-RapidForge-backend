@@ -1,6 +1,7 @@
 tags:
   - Water
-summary: Update a water record
+summary: Edit water intake
+description: Updates an existing water intake record.
 operationId: updateWaterRecord
 security:
   - bearerAuth: []
@@ -9,10 +10,10 @@ parameters:
     name: id
     schema:
       type: string
+      example: '67cf23f02f0a65716cfc2002'
     required: true
     description: ID of the water record to update
 requestBody:
-  required: true
   content:
     application/json:
       schema:
@@ -20,18 +21,20 @@ requestBody:
         properties:
           date:
             type: string
-            format: date
-            description: Date of the water record
+            pattern: '^(\d{4})-(\d{2})-(\d{2})$'
+            description: Date of the water record in the format yyyy-mm-dd
             example: '2025-03-08'
+          volume:
+            type: integer
+            description: Volume of water (in ml)
+            example: 1500
+            minimum: 50 # Мінімум 50 мл
+            maximum: 5000 # Максимум 5000 мл
           time:
             type: string
-            format: time
-            description: Time of the water record
-            example: '12:00'
-          volume:
-            type: number
-            description: Volume of water (in ml)
-            example: 1
+            pattern: '^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$'
+            description: Time of the water record in the format hh:mm
+            example: '10:30'
 responses:
   '200':
     description: Successfully updated water record
@@ -52,8 +55,12 @@ responses:
               example: Successfully updated water record!
             data:
               type: object
-          $ref: ../../../components/schemas/waterRecord.yaml
+              $ref: ../../../components/schemas/water.yaml
   '400':
-    $ref: ../../../components/responses/400-water.yaml
+    $ref: ../../../components/responses/400.yaml
+  '401':
+    $ref: ../../../components/responses/401.yaml
   '404':
-    $ref: ../../../components/responses/404-water.yaml
+    $ref: ../../../components/responses/404.yaml
+  '500':
+    $ref: ../../../components/responses/500.yaml

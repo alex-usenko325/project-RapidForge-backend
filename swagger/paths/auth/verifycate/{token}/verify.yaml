@@ -19,10 +19,6 @@ responses:
       application/json:
         schema:
           type: object
-          required:
-            - message
-            - status
-            - data
           properties:
             message:
               type: string
@@ -34,10 +30,8 @@ responses:
               type: object
               example: {}
   '400':
-    $ref: ../../../components/responses/400-verify-token.yaml
-  '401':
-    $ref: ../../../components/responses/401-auth.yaml
+    $ref: ../../../../components/responses/400-verify-token.yaml
   '404':
-    $ref: ../../../components/responses/404.yaml
+    $ref: ../../../../components/responses/404.yaml
   '500':
-    $ref: ../../../components/responses/500.yaml
+    $ref: ../../../../components/responses/500.yaml

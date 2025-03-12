@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import { initMongoDB } from './db/initMongoConnection.js';
 import router from './routers/index.js';
 
-import setupMiddleware from './middlewares/setupMiddleware.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 import swaggerDocs from './middlewares/swaggerDocs.js';
@@ -20,18 +19,27 @@ dotenv.config();
 export const startServer = async () => {
   const app = express();
 
-  app.use(express.json());
-  app.use(cors({
-  origin: '*', // Дозволяє доступ з усіх доменів
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Дозволяє певні HTTP методи
-  allowedHeaders: ['Content-Type', 'Authorization'], // Дозволяє певні заголовки
-  credentials: true, // Дозволяє передавати cookies та інші приватні дані
-}));
+  app.use(
+    express.json({
+      type: ['application/json'],
+      limit: '500kb',
+    }),
+  );
+
+  app.use(
+    cors({
+      origin: [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'https://project-node-react-frontend.vercel.app',
+      ], // Дозволяє доступ з цих доменів
+      credentials: true, // Дозволяє передавати cookies та інші приватні дані
+    }),
+  );
+
   app.use(cookieParser());
 
   await initMongoDB();
-
-  setupMiddleware(app);
 
   app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/api-docs', swaggerDocs());

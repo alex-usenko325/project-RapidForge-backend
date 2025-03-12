@@ -9,26 +9,17 @@ parameters:
     name: id
     schema:
       type: string
+      example: '67cf23f02f0a65716cfc2002'
     required: true
     description: ID of the water record to delete
 responses:
-  '200':
-    description: Water consumption record deleted successfully
-    content:
-      application/json:
-        schema:
-          type: object
-          required:
-            - status
-            - message
-          properties:
-            status:
-              type: integer
-              example: 200
-            message:
-              type: string
-              example: Water consumption record deleted successfully!
+  '204':
+    description: No Content
+  '400':
+    $ref: '../../../components/responses/400.yaml'
   '401':
     $ref: '../../../components/responses/401.yaml'
   '404':
-    $ref: '../../../components/responses/404-water.yaml'
+    $ref: '../../../components/responses/404.yaml'
+  '500':
+    $ref: ../../../components/responses/500.yaml

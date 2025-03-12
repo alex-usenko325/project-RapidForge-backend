@@ -12,6 +12,21 @@ import {
 import { ONE_DAY } from '../constants/index.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
 
+const setupSession = (res, session) => {
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true, // Локально можна використовувати secure: true
+    expires: new Date(Date.now() + ONE_DAY),
+  });
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true, // Локально можна використовувати secure: false
+    expires: new Date(Date.now() + ONE_DAY),
+  });
+};
+
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
 
@@ -65,15 +80,7 @@ export const verifyEmailController = async (req, res) => {
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
-
-  res.cookie('sessionId', session._id.toString(), {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
+setupSession(res, session);
 
   res.json({
     status: 200,
@@ -93,16 +100,7 @@ export const logoutUserController = async (req, res) => {
   res.status(204).send();
 };
 
-const setupSession = (res, session) => {
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
-};
+
 
 export const refreshUserSessionController = async (req, res) => {
   const session = await refreshUsersSession({
