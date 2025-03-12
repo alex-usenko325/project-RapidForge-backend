@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Users app
+  title: AquaTrack API
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -12,10 +12,18 @@ tags:
   - name: Auth
     description: Auth operations
   - name: Water
-    description: Operations about water records.
+    description: |
+      The AquaTrack API allows users to log their daily water intake, edit or delete records, and track their progress towards a daily hydration goal. Users can view their current da's water consumption and analyze their intake over the month.
+
+      Features
+      - Log water intake: Users can add a record specifying the amount of water consumed and the time of consumption.
+      - Edit entries: Users can update a previously logged water intake.
+      - Delete entries: Users can remove a water consumption record.
+      - Track daily progress: Users can view their total water consumption for the current day or other day and check if they have met their daily goal.
+      - View monthly data: Users can see their water intake records for the entire month, helping them analyze hydration trends.
 servers:
-  - url: http://localhost:3000
   - url: https://aqua-track-app.onrender.com
+  - url: http://localhost:3000
 paths:
   /auth/register:
     post:
@@ -35,8 +43,6 @@ paths:
     post:
       $ref: ../swagger/paths/auth/requestEmailVerification.yaml
   /water:
-    get:
-      $ref: ../swagger/paths/water/get.yaml
     post:
       $ref: ../swagger/paths/water/post.yaml
   /water/{id}:
@@ -44,6 +50,12 @@ paths:
       $ref: ../swagger/paths/water/{id}/patch.yaml
     delete:
       $ref: ../swagger/paths/water/{id}/delete.yaml
+  /water/today:
+    get:
+      $ref: ../swagger/paths/water/today.yaml
+  /water/month:
+    get:
+      $ref: ../swagger/paths/water/month.yaml
   /user/usersCount:
     get:
       $ref: ../swagger/paths/user/get.yaml

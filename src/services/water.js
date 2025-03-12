@@ -7,9 +7,6 @@ export const addWaterRecord = async ({ userId, date, time, volume }) => {
 };
 
 export const updateWaterRecord = async (userId, recordId, updateData) => {
-  // if (updateData.data || updateData.time) {
-  //   throw createHttpError(400, 'Updating date or time is not allowed');
-  // }
   const updatedRecord = await waterCollection.findOneAndUpdate(
     { _id: recordId, userId },
     updateData,
