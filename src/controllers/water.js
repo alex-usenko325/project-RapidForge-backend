@@ -49,7 +49,7 @@ export const getWaterTodayController = async (req, res) => {
     return res.json({
       status: 200,
       message: 'No water consumption data found for today',
-      data: {},
+      data: [],
     });
   }
 
@@ -88,7 +88,7 @@ export const getWaterForMonthController = async (req, res) => {
     return res.json({
       status: 200,
       message: `No water consumption data found for requested month ${parsedYear}-${parsedMonth}`,
-      data: {},
+      data: [],
     });
   }
 
