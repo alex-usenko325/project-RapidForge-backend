@@ -13,8 +13,14 @@ export const updateWaterRecordSchema = Joi.object({
       'string.pattern.base': 'Time must be in the format hh:mm',
       'string.base': 'Time must be a string',
     }),
-  volume: Joi.number().min(50).max(5000).positive().optional().messages({
-    'number.base': 'Volume must be a number',
-    'number.positive': 'Volume must be a positive number',
-  }),
+  volume: Joi.number()
+    .integer()
+    .min(50)
+    .max(5000)
+    .positive()
+    .optional()
+    .messages({
+      'number.base': 'Volume must be a number',
+      'number.positive': 'Volume must be a positive number',
+    }),
 }).min(1);

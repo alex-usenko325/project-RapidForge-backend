@@ -16,8 +16,9 @@ content:
           example: ConflictError
         data:
           type: object
-          required:
-            - message
+          oneOf:
+            - type: 'null'
+            - type: 'object'
           properties:
             message:
               type: string
