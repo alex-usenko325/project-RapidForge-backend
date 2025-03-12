@@ -71,10 +71,10 @@ paths:
       $ref: ../swagger/paths/user/get.yaml
   /user/update/{id}:
     patch:
-      $ref: ../swagger/paths/user/user_update.yaml
+      $ref: ../swagger/paths/user/{id}/user_update.yaml
   /user/avatar/{id}:
     patch:
-      $ref: ../swagger/paths/user/user_avatar.yaml
+      $ref: ../swagger/paths/user/{id}/user_avatar.yaml
   /user/currentUser:
     get:
       $ref: ../swagger/paths/user/getUser.yaml

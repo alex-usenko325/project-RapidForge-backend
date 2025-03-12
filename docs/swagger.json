@@ -830,7 +830,8 @@
             "required": true,
             "description": "The ID of the user to update",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "67cc5bb27a2222d660c179f9"
             }
           }
         ],
@@ -903,6 +904,9 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
           "404": {
             "$ref": "#/components/responses/404"
           },
@@ -932,7 +936,8 @@
             "required": true,
             "description": "The ID of the user whose avatar will be updated",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "67cc5bb27a2222d660c179f9"
             }
           }
         ],
@@ -945,7 +950,8 @@
                 "properties": {
                   "avatar": {
                     "type": "string",
-                    "format": "binary"
+                    "format": "binary",
+                    "description": "User's avatar"
                   }
                 }
               }
@@ -977,7 +983,10 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/400-avatar"
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -1444,26 +1453,6 @@
                 "message": {
                   "type": "string",
                   "example": "Bad request - Something went wrong while sending verification email"
-                }
-              }
-            }
-          }
-        }
-      },
-      "400-avatar": {
-        "description": "Invalid file type or no file uploaded",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 400
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Invalid file type. Allowed: jpeg, png, jpg"
                 }
               }
             }

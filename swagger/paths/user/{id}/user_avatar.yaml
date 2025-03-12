@@ -12,6 +12,7 @@ parameters:
     description: The ID of the user whose avatar will be updated
     schema:
       type: string
+      example: '67cc5bb27a2222d660c179f9'
 requestBody:
   required: true
   content:
@@ -22,6 +23,7 @@ requestBody:
           avatar:
             type: string
             format: binary
+            description: "User's avatar"
 responses:
   '200':
     description: Avatar updated successfully
@@ -37,10 +39,12 @@ responses:
               type: string
               example: 'Avatar successfully updated!'
             data:
-              $ref: ../../components/schemas/user.yaml
+              $ref: ../../../components/schemas/user.yaml
   '400':
-    $ref: ../../components/responses/400-avatar.yaml
+    $ref: ../../../components/responses/400.yaml
+  '401':
+    $ref: ../../../components/responses/401.yaml
   '404':
-    $ref: ../../components/responses/404.yaml
+    $ref: ../../../components/responses/404.yaml
   '500':
-    $ref: ../../components/responses/500.yaml
+    $ref: ../../../components/responses/500.yaml
