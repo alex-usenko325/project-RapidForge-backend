@@ -45,7 +45,7 @@ export const getWaterTodayController = async (req, res) => {
   }
   const waterData = await getWaterToday(userId);
 
-  if (!waterData) {
+  if (!waterData || waterData.length === 0) {
     return res.json({
       status: 200,
       message: 'No water consumption data found for today',
@@ -75,10 +75,7 @@ export const getWaterForMonthController = async (req, res) => {
     parsedMonth < 1 ||
     parsedMonth > 12
   ) {
-    return res.status(400).json({
-      status: 400,
-      message: 'Invalid year or month',
-    });
+    throw createHttpError(400, 'Invalid year or month');
   }
 
   const monthWaterData = await getWaterForMonth(
