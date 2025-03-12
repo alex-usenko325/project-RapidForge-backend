@@ -11,8 +11,8 @@ import {
 } from '../validation/auth.js';
 import {
   registerUserController,
-  requestEmailVerificationController,
-  verifyEmailController,
+  // requestEmailVerificationController,
+  // verifyEmailController,
   loginUserController,
   logoutUserController,
   refreshUserSessionController,
@@ -30,16 +30,16 @@ authRouter.post(
   ctrlWrapper(registerUserController),
 );
 
-authRouter.post(
-  '/verifycate',
-  validateBody(requestResetEmailSchema), // перевірка схеми для верифікації
-  ctrlWrapper(requestEmailVerificationController), // контролер для верифікації
-);
+// authRouter.post(
+//   '/verifycate',
+//   validateBody(requestResetEmailSchema), // перевірка схеми для верифікації
+//   ctrlWrapper(requestEmailVerificationController), // контролер для верифікації
+// );
 
-authRouter.get(
-  '/verifycate',
-  ctrlWrapper(verifyEmailController), // контролер для верифікації
-);
+// authRouter.get(
+//   '/verifycate',
+//   ctrlWrapper(verifyEmailController), // контролер для верифікації
+// );
 
 authRouter.post(
   '/login',

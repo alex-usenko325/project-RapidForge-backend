@@ -6,8 +6,8 @@ import {
   requestResetToken,
   resetPassword,
   loginOrSignupWithGoogle,
-  requestEmailVerificationToken,
-  verifyEmail,
+  // requestEmailVerificationToken,
+  // verifyEmail,
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
@@ -37,50 +37,50 @@ export const registerUserController = async (req, res) => {
   });
 };
 
-export const requestEmailVerificationController = async (req, res) => {
-  try {
-    // Викликаємо функцію для генерування токену і відправлення email
-    await requestEmailVerificationToken(req.body.email);
+// export const requestEmailVerificationController = async (req, res) => {
+//   try {
+//     // Викликаємо функцію для генерування токену і відправлення email
+//     await requestEmailVerificationToken(req.body.email);
 
-    // Відповідь клієнту
-    res.json({
-      message: 'Verification email was successfully sent!',
-      status: 200,
-      data: {},
-    });
-  } catch (error) {
-    res.status(400).json({
-      message:
-        error.message ||
-        'Something went wrong while sending verification email',
-      status: 400,
-    });
-  }
-};
+//     // Відповідь клієнту
+//     res.json({
+//       message: 'Verification email was successfully sent!',
+//       status: 200,
+//       data: {},
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       message:
+//         error.message ||
+//         'Something went wrong while sending verification email',
+//       status: 400,
+//     });
+//   }
+// };
 
-export const verifyEmailController = async (req, res) => {
-  try {
-    // Викликаємо функцію для верифікації email
-    await verifyEmail(req, res);
+// export const verifyEmailController = async (req, res) => {
+//   try {
+//     // Викликаємо функцію для верифікації email
+//     await verifyEmail(req, res);
 
-    // Відповідь клієнту
-    res.json({
-      message: 'Email successfully verified!',
-      status: 200,
-      data: {},
-    });
-  } catch (error) {
-    res.status(400).json({
-      message: error.message || 'Invalid or expired verification token',
-      status: 400,
-    });
-  }
-};
+//     // Відповідь клієнту
+//     res.json({
+//       message: 'Email successfully verified!',
+//       status: 200,
+//       data: {},
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       message: error.message || 'Invalid or expired verification token',
+//       status: 400,
+//     });
+//   }
+// };
 
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
-setupSession(res, session);
+  setupSession(res, session);
 
   res.json({
     status: 200,
@@ -99,8 +99,6 @@ export const logoutUserController = async (req, res) => {
 
   res.status(204).send();
 };
-
-
 
 export const refreshUserSessionController = async (req, res) => {
   const session = await refreshUsersSession({
