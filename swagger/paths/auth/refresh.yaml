@@ -6,6 +6,20 @@ post:
   description: "Refresh the user's access token using a valid refresh token."
   security:
     - bearerAuth: []
+  requestBody:
+    description: Refresh token
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - refreshToken
+          properties:
+            refreshToken:
+              type: string
+              description: Refresh token received during login.
+              example: 'your_refresh_token'
   responses:
     '200':
       description: 'Successfully refreshed a session!'
