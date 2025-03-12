@@ -29,6 +29,7 @@ export const startServer = async () => {
   app.use(
     cors({
       origin: [
+        'http://localhost:5173',
         'http://localhost:5174',
         'https://project-node-react-frontend.vercel.app',
       ], // Дозволяє доступ з цих доменів
