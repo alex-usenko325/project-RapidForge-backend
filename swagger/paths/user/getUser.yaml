@@ -20,8 +20,10 @@ responses:
               type: string
               example: 'The current user is found!'
             data:
-              $ref: ../../components/schemas/register.yaml
+              $ref: ../../components/schemas/user.yaml
   '400':
     $ref: ../../components/responses/400.yaml
+  '401':
+    $ref: ../../components/responses/401-auth.yaml
   '500':
     $ref: ../../components/responses/500.yaml

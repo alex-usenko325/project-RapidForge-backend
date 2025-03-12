@@ -11,7 +11,7 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: ../../components/schemas/register.yaml
+        $ref: ../../components/schemas/user.yaml
 responses:
   '201':
     description: Registered a user
@@ -28,7 +28,7 @@ responses:
               type: string
               example: Successfully registered a new user!
             data:
-              $ref: ../../components/schemas/register.yaml
+              $ref: ../../components/schemas/user.yaml
   '400':
     $ref: ../../components/responses/400.yaml
   '409':
