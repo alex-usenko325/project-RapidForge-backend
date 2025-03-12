@@ -47,6 +47,9 @@ paths:
   /user/usersCount:
     get:
       $ref: ../swagger/paths/user/get.yaml
+  /user/currentUser:
+    get:
+      $ref: ../swagger/paths/user/getUser.yaml
 components:
   securitySchemes:
     bearerAuth:
