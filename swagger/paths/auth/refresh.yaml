@@ -19,7 +19,7 @@ post:
             refreshToken:
               type: string
               description: Refresh token received during login.
-              example: 'your_refresh_token'
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
   responses:
     '200':
       description: 'Successfully refreshed a session!'

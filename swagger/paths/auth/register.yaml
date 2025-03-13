@@ -2,7 +2,7 @@ tags:
   - Auth
 summary: Register a new user
 operationId: registerUser
-description: 'Creates a new user account and returns email and  authentication token.'
+description: 'Creates a new user account and returns email and authentication token.'
 security:
   - bearerAuth: []
 requestBody:
@@ -41,7 +41,7 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully registered a new user!
+              example: 'Successfully registered a new user!'
             data:
               type: object
               required:
@@ -57,6 +57,8 @@ responses:
                   type: string
                   example: 'bseDlf/Chq0dMG6c6o194qTqA6KaFeMMt6lJZOhp'
   '400':
-    $ref: ../../components/responses/400.yaml
+    $ref: '../../components/responses/400.yaml'
+  '409':
+    $ref: '../../components/responses/409.yaml'
   '500':
-    $ref: ../../components/responses/500.yaml
+    $ref: '../../components/responses/500.yaml'

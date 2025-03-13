@@ -1,33 +1,4 @@
 type: object
-<<<<<<< HEAD
-properties:
-  userId:
-    type: string
-    description: User ID
-  accessToken:
-    type: string
-    description: Access token
-  refreshToken:
-    type: string
-    description: Refresh token
-  accessTokenValidUntil:
-    type: string
-    format: date-time
-    description: Access token expiration date and time
-  refreshTokenValidUntil:
-    type: string
-    format: date-time
-    description: Refresh token expiration date and time
-=======
->>>>>>> main
-required:
-  - userId
-  - accessToken
-  - refreshToken
-  - accessTokenValidUntil
-  - refreshTokenValidUntil
-<<<<<<< HEAD
-=======
 properties:
   userId:
     type: string
@@ -51,4 +22,3 @@ properties:
     format: date-time
     description: Refresh token expiration date and time
     example: '2024-03-22T10:30:00Z'
->>>>>>> main
