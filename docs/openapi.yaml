@@ -52,6 +52,12 @@ paths:
   /auth/requestEmailVerification:
     post:
       $ref: ../swagger/paths/auth/requestEmailVerification.yaml
+  /auth/send-reset-password-email:
+    post:
+      $ref: ../swagger/paths/auth/send-reset-pwd-email.yaml
+  /auth/reset-password:
+    post:
+      $ref: ../swagger/paths/auth/reset-password.yaml
   /water:
     post:
       $ref: ../swagger/paths/water/post.yaml

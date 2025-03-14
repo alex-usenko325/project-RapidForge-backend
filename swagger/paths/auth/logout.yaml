@@ -27,4 +27,6 @@ responses:
               example: 'Invalid session ID'
             data:
               type: object
-              nullable: true
+              oneOf:
+                - type: 'null'
+                - type: 'object'

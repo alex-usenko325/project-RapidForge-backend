@@ -15,10 +15,7 @@ content:
           example: Missing or invalid data
         data:
           type: object
-          oneOf:
-            - type: 'null'
-            - type: 'object'
           properties:
             message:
               type: string
-              example: 'Invalid request parameters.'
+              example: 'Missing or invalid request parameters.'

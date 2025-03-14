@@ -16,10 +16,10 @@ import {
   loginUserController,
   logoutUserController,
   refreshUserSessionController,
-  requestResetEmailController,
   resetPasswordController,
   getGoogleOAuthUrlController,
   loginWithGoogleController,
+  requestResetPwdController,
 } from '../controllers/auth.js';
 
 const authRouter = Router();
@@ -51,13 +51,13 @@ authRouter.post('/logout', ctrlWrapper(logoutUserController));
 authRouter.post('/refresh', ctrlWrapper(refreshUserSessionController));
 
 authRouter.post(
-  '/send-reset-email',
+  '/send-reset-password-email',
   validateBody(requestResetEmailSchema),
-  ctrlWrapper(requestResetEmailController),
+  ctrlWrapper(requestResetPwdController),
 );
 
 authRouter.post(
-  '/reset-pwd',
+  '/reset-password',
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),
 );

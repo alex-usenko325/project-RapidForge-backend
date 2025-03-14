@@ -197,6 +197,16 @@ export const requestResetToken = async (email) => {
   });
 };
 
+export const requestResetPwdController = async (req, res) => {
+  await requestResetToken(req.body.email);
+
+  res.json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
 export const resetPassword = async (payload) => {
   let entries;
   try {

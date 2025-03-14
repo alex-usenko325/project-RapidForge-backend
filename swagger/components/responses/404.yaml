@@ -15,9 +15,6 @@ content:
           example: NotFoundError
         data:
           type: object
-          oneOf:
-            - type: 'null'
-            - type: 'object'
           properties:
             message:
               type: string

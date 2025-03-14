@@ -80,7 +80,7 @@ export const verifyEmailController = async (req, res) => {
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
-setupSession(res, session);
+  setupSession(res, session);
 
   res.json({
     status: 200,
@@ -100,8 +100,6 @@ export const logoutUserController = async (req, res) => {
   res.status(204).send();
 };
 
-
-
 export const refreshUserSessionController = async (req, res) => {
   const session = await refreshUsersSession({
     sessionId: req.cookies.sessionId,
@@ -119,7 +117,7 @@ export const refreshUserSessionController = async (req, res) => {
   });
 };
 
-export const requestResetEmailController = async (req, res) => {
+export const requestResetPwdController = async (req, res) => {
   await requestResetToken(req.body.email);
   res.json({
     message: 'Reset password email was successfully sent!',
