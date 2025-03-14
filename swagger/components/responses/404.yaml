@@ -21,4 +21,4 @@ content:
           properties:
             message:
               type: string
-              example: 'User not found.'
+              example: 'The requested resource does not exist.'

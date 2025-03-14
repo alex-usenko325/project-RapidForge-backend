@@ -18,12 +18,10 @@ properties:
     type: string
     format: email
     example: 'JTestemail@gmail.com'
-<<<<<<< HEAD:swagger/components/schemas/register.yaml
   password:
     description: "User's password"
     type: string
     example: 'password12345!'
-=======
   gender:
     description: "User's gender"
     type: string
@@ -53,4 +51,3 @@ properties:
     description: "User's verification status"
     type: boolean
     example: false
->>>>>>> main:swagger/components/schemas/user.yaml
