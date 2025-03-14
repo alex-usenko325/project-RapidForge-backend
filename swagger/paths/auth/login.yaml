@@ -3,8 +3,7 @@ tags:
 summary: Login to the account
 operationId: loginUser
 description: 'Logs in a user and returns an authentication token.'
-security:
-  - bearerAuth: []
+security: []
 requestBody:
   description: 'User login data'
   required: true
@@ -19,11 +18,16 @@ requestBody:
           email:
             description: "User's email"
             type: string
-            example: 'testemail@gmail.com'
+            example: 'JTestemail@gmail.com'
           password:
-            description: "User's password"
             type: string
-            example: 'password12345!'
+            minLength: 6
+            maxLength: 50
+            pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])'
+            example: 'Example@1'
+            description: |
+              Password must be between 6 and 50 characters in length.
+              It must contain at least one uppercase letter, one number, and one special character from the following: !@#$%^&*.
 responses:
   '200':
     description: Logged in successfully
@@ -34,7 +38,7 @@ responses:
           required:
             - status
             - message
-            - token
+            - data
           properties:
             status:
               type: integer
@@ -42,12 +46,15 @@ responses:
             message:
               type: string
               example: Successfully logged in a user!
-            token:
-              type: string
-              example: 'bseDlf/Chq0dMG6c6o194qTqA6KaFeMMt6lJZOhp'
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  example: 'bseDlf/Chq0dMG6c6o194qTqA6KaFeMMt6lJZOhp'
   '400':
     $ref: ../../components/responses/400.yaml
-  '401':
-    $ref: ../../components/responses/401-auth.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
   '500':
     $ref: ../../components/responses/500.yaml

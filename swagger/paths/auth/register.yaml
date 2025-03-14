@@ -3,8 +3,7 @@ tags:
 summary: Register a new user
 operationId: registerUser
 description: 'Creates a new user account and returns email and authentication token.'
-security:
-  - bearerAuth: []
+security: []
 requestBody:
   description: 'User registration data'
   required: true
@@ -17,13 +16,18 @@ requestBody:
           - password
         properties:
           email:
-            description: "User's email"
+            description: 'JTestemail@gmail.com'
             type: string
             example: 'testemail@gmail.com'
           password:
-            description: "User's password"
             type: string
-            example: 'password12345!'
+            minLength: 6
+            maxLength: 50
+            pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])'
+            example: 'Example@1'
+            description: |
+              Password must be between 6 and 50 characters in length.
+              It must contain at least one uppercase letter, one number, and one special character from the following: !@#$%^&*.
 responses:
   '201':
     description: Registered a user
@@ -44,18 +48,7 @@ responses:
               example: 'Successfully registered a new user!'
             data:
               type: object
-              required:
-                - email
-                - token
-              properties:
-                email:
-                  description: "User's email"
-                  type: string
-                  example: 'testemail@gmail.com'
-                token:
-                  description: 'Authentication token'
-                  type: string
-                  example: 'bseDlf/Chq0dMG6c6o194qTqA6KaFeMMt6lJZOhp'
+              $ref: ../../components/schemas/user.yaml
   '400':
     $ref: '../../components/responses/400.yaml'
   '409':
