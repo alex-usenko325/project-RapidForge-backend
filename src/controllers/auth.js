@@ -80,7 +80,7 @@ export const verifyEmailController = async (req, res) => {
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
-setupSession(res, session);
+  setupSession(res, session);
 
   res.json({
     status: 200,
@@ -99,8 +99,6 @@ export const logoutUserController = async (req, res) => {
 
   res.status(204).send();
 };
-
-
 
 export const refreshUserSessionController = async (req, res) => {
   const session = await refreshUsersSession({
