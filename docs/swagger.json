@@ -39,7 +39,7 @@
         ],
         "summary": "Register a new user",
         "operationId": "registerUser",
-        "description": "Creates a new user account and returns a success message.",
+        "description": "Creates a new user account and returns email and  authentication token.",
         "security": [
           {
             "bearerAuth": []
@@ -51,7 +51,23 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user"
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User's email",
+                    "type": "string",
+                    "example": "testemail@gmail.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "password12345!"
+                  }
+                }
               }
             }
           }
@@ -69,12 +85,32 @@
                     "data"
                   ],
                   "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
                     "message": {
                       "type": "string",
                       "example": "Successfully registered a new user!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/user"
+                      "type": "object",
+                      "required": [
+                        "email",
+                        "token"
+                      ],
+                      "properties": {
+                        "email": {
+                          "description": "User's email",
+                          "type": "string",
+                          "example": "testemail@gmail.com"
+                        },
+                        "token": {
+                          "description": "Authentication token",
+                          "type": "string",
+                          "example": "bseDlf/Chq0dMG6c6o194qTqA6KaFeMMt6lJZOhp"
+                        }
+                      }
                     }
                   }
                 }
@@ -83,9 +119,6 @@
           },
           "400": {
             "$ref": "#/components/responses/400"
-          },
-          "409": {
-            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -112,7 +145,23 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/login"
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User's email",
+                    "type": "string",
+                    "example": "testemail@gmail.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "password12345!"
+                  }
+                }
               }
             }
           }
@@ -153,8 +202,66 @@
           "401": {
             "$ref": "#/components/responses/401-auth"
           },
-          "409": {
-            "$ref": "#/components/responses/409"
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/get-oauth-utl": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get Google OAuth URL",
+        "operationId": "getGoogleOAuthUrl",
+        "description": "Returns the URL for redirecting the user to Google OAuth.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved Google OAuth URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "massage",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "massage": {
+                      "type": "string",
+                      "example": "Successfully get Google OAuth url!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "url"
+                      ],
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "description": "URL for Google OAuth authorization.",
+                          "example": "https://accounts.google.com/o/oauth2/auth?..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -162,7 +269,88 @@
         }
       }
     },
-    "/auth/verify/{token}": {
+    "/auth/confirm-oauth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login/Signup with Google OAuth",
+        "operationId": "loginWithGoogle",
+        "description": "Logs in or signs up a user using Google OAuth.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Google OAuth code",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "code"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Authorization code received from Google.",
+                    "example": "4/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in via Google OAuth",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in via Google OAuth!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "accessToken"
+                      ],
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "description": "Access token for the user."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401-auth"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/verifycate/{token}": {
       "get": {
         "tags": [
           "Auth"
@@ -193,11 +381,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "message",
-                    "status",
-                    "data"
-                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -219,11 +402,82 @@
           "400": {
             "$ref": "#/components/responses/400-verify-token"
           },
-          "401": {
-            "$ref": "#/components/responses/401-auth"
-          },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/verifycate": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Request email verification",
+        "operationId": "requestEmailVerification",
+        "description": "Sends an email with a verification token to the user's email address.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Email address for verification",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email address",
+                    "example": "user@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "status",
+                    "data"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Verification email was successfully sent!"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400-verify"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -245,8 +499,21 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Logged out successfully. No content is returned."
+          "200": {
+            "description": "User successfully logged out",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged out"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Invalid session ID",
@@ -270,7 +537,7 @@
                     },
                     "data": {
                       "type": "object",
-                      "nullable": true
+                      "example": {}
                     }
                   }
                 }
@@ -293,6 +560,27 @@
             "bearerAuth": []
           }
         ],
+        "requestBody": {
+          "description": "Refresh token",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "refreshToken"
+                ],
+                "properties": {
+                  "refreshToken": {
+                    "type": "string",
+                    "description": "Refresh token received during login.",
+                    "example": "your_refresh_token"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successfully refreshed a session!",
@@ -333,14 +621,163 @@
         }
       }
     },
-    "/auth/requestEmailVerification": {
+    "/auth/reset-pwd": {
       "post": {
         "tags": [
           "Auth"
         ],
-        "summary": "Request email verification",
-        "operationId": "requestEmailVerification",
-        "description": "Sends an email with a verification token to the user's email address.",
+        "summary": "Reset user password",
+        "operationId": "resetPassword",
+        "description": "Resets the user's password. Requires a valid reset token and the new password.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Password reset data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "password"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "Reset token received via email",
+                    "example": "your_reset_token"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "New password",
+                    "example": "NewPassword123!"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password reset successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Password was successfully reset!"
+                      },
+                      "status": {
+                        "type": "integer",
+                        "example": 200
+                      },
+                      "data": {
+                        "type": "object",
+                        "example": {}
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "$ref": "../../components/responses/400.yaml"
+            },
+            "401": {
+              "$ref": "../../components/responses/401.yaml"
+            },
+            "404": {
+              "$ref": "../../components/responses/404.yaml"
+            },
+            "500": {
+              "$ref": "../../components/responses/500.yaml"
+            }
+          }
+        }
+      }
+    },
+    "/auth/send-reset-email": {
+      "post": {
+        "paths": {
+          "/auth/send-reset-email": {
+            "post": {
+              "tags": [
+                "Auth"
+              ],
+              "summary": "Request password reset email",
+              "operationId": "requestResetEmail",
+              "description": "Sends an email to the user with a link to reset their password.\n",
+              "requestBody": {
+                "description": "User's email address",
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": [
+                        "email"
+                      ],
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "User's email address",
+                          "example": "test@example.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Email sent successfully",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object"
+                      },
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "Reset password email was successfully sent!",
+                          "status": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "data": {
+                            "type": "object",
+                            "example": {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "$ref": "../../components/responses/404.yaml"
+                },
+                "500": {
+                  "$ref": "../../components/responses/500.yaml"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/water": {
+<<<<<<< HEAD
+      "get": {
+        "tags": [
+          "Water"
+        ],
+        "summary": "Get water data for today",
+        "operationId": "getWaterToday",
         "security": [
           {
             "bearerAuth": []
@@ -348,24 +785,47 @@
         ],
         "responses": {
           "200": {
-            "description": "Verification email sent successfully",
+            "description": "Water consumption data retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "required": [
-                    "message",
                     "status",
+                    "message",
                     "data"
                   ],
                   "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Verification email was successfully sent!"
-                    },
                     "status": {
                       "type": "integer",
                       "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Water consumption data retrieved successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/waterRecord"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Water consumption data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No water consumption data found for today"
                     },
                     "data": {
                       "type": "object",
@@ -376,16 +836,16 @@
               }
             }
           },
-          "400": {
-            "$ref": "#/components/responses/400-verify"
+          "401": {
+            "$ref": "#/components/responses/401"
           },
-          "500": {
-            "$ref": "#/components/responses/500"
+          "404": {
+            "$ref": "#/components/responses/404-water"
           }
         }
-      }
-    },
-    "/water": {
+      },
+=======
+>>>>>>> main
       "post": {
         "tags": [
           "Water"
@@ -1054,131 +1514,6 @@
         "scheme": "bearer"
       }
     },
-    "schemas": {
-      "user": {
-        "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
-        "properties": {
-          "_id": {
-            "description": "User's ID",
-            "type": "string",
-            "example": "67cc5bb27a2222d660c179f9"
-          },
-          "name": {
-            "description": "User's name",
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 12,
-            "example": "JohnDoe"
-          },
-          "email": {
-            "description": "User's email",
-            "type": "string",
-            "format": "email",
-            "example": "JTestemail@gmail.com"
-          },
-          "gender": {
-            "description": "User's gender",
-            "type": "string",
-            "enum": [
-              "woman",
-              "man"
-            ],
-            "example": "woman"
-          },
-          "weight": {
-            "description": "User's weight",
-            "type": "number",
-            "minimum": 0,
-            "example": 60
-          },
-          "dailySportTime": {
-            "description": "User's daily sport time in minutes",
-            "type": "integer",
-            "minimum": 0,
-            "example": 1
-          },
-          "dailyNorm": {
-            "description": "User's daily water intake norm in ml",
-            "type": "number",
-            "minimum": 500,
-            "maximum": 15000,
-            "example": 2000
-          },
-          "avatar": {
-            "description": "User's avatar URL",
-            "type": "string",
-            "example": "https://res.cloudinary.com/diee7l1on/image/upload/v1741187439/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467_bvqe8k.avif"
-          },
-          "isVerified": {
-            "description": "User's verification status",
-            "type": "boolean",
-            "example": false
-          }
-        }
-      },
-      "login": {
-        "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
-        "properties": {
-          "email": {
-            "description": "User's email",
-            "type": "string",
-            "example": "testemail@gmail.com"
-          },
-          "password": {
-            "description": "User's password",
-            "type": "string",
-            "example": "password12345!"
-          }
-        }
-      },
-      "water": {
-        "type": "object",
-        "required": [
-          "date",
-          "time",
-          "volume"
-        ],
-        "properties": {
-          "_id": {
-            "type": "string",
-            "description": "Water record ID",
-            "example": "67cf23f02f0a65716cfc2002"
-          },
-          "userId": {
-            "type": "string",
-            "description": "User ID",
-            "example": "67cf170767c430dab2ce8d79"
-          },
-          "date": {
-            "type": "string",
-            "pattern": "^(\\d{4})-(\\d{2})-(\\d{2})$",
-            "description": "Date of the water record in the format yyyy-mm-dd",
-            "example": "2024-12-31"
-          },
-          "time": {
-            "type": "string",
-            "pattern": "^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$",
-            "description": "Time of the water record in the format hh:mm",
-            "example": "23:59"
-          },
-          "volume": {
-            "type": "integer",
-            "description": "Volume of water (in ml)",
-            "example": 650,
-            "minimum": 50,
-            "maximum": 5000
-          }
-        }
-      }
-    },
     "responses": {
       "400": {
         "description": "Bad request",
@@ -1295,7 +1630,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "The requested resource does not exist."
+                      "example": "User not found."
                     }
                   }
                 }
@@ -1456,6 +1791,112 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "water": {
+        "type": "object",
+        "required": [
+          "date",
+          "time",
+          "volume"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Water record ID",
+            "example": "67cf23f02f0a65716cfc2002"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID",
+            "example": "67cf170767c430dab2ce8d79"
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^(\\d{4})-(\\d{2})-(\\d{2})$",
+            "description": "Date of the water record in the format yyyy-mm-dd",
+            "example": "2024-12-31"
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$",
+            "description": "Time of the water record in the format hh:mm",
+            "example": "23:59"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "Volume of water (in ml)",
+            "example": 650,
+            "minimum": 50,
+            "maximum": 5000
+          }
+        }
+      },
+      "user": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "_id": {
+            "description": "User's ID",
+            "type": "string",
+            "example": "67cc5bb27a2222d660c179f9"
+          },
+          "name": {
+            "description": "User's name",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 12,
+            "example": "JohnDoe"
+          },
+          "email": {
+            "description": "User's email",
+            "type": "string",
+            "format": "email",
+            "example": "JTestemail@gmail.com"
+          },
+          "gender": {
+            "description": "User's gender",
+            "type": "string",
+            "enum": [
+              "woman",
+              "man"
+            ],
+            "example": "woman"
+          },
+          "weight": {
+            "description": "User's weight",
+            "type": "number",
+            "minimum": 0,
+            "example": 60
+          },
+          "dailySportTime": {
+            "description": "User's daily sport time in minutes",
+            "type": "integer",
+            "minimum": 0,
+            "example": 1
+          },
+          "dailyNorm": {
+            "description": "User's daily water intake norm in ml",
+            "type": "number",
+            "minimum": 500,
+            "maximum": 15000,
+            "example": 2000
+          },
+          "avatar": {
+            "description": "User's avatar URL",
+            "type": "string",
+            "example": "https://res.cloudinary.com/diee7l1on/image/upload/v1741187439/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467_bvqe8k.avif"
+          },
+          "isVerified": {
+            "description": "User's verification status",
+            "type": "boolean",
+            "example": false
           }
         }
       }

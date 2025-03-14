@@ -6,10 +6,18 @@ description: 'Logs out the user from the account.'
 security:
   - bearerAuth: []
 responses:
-  '204':
-    description: 'Logged out successfully. No content is returned.'
+  '200':
+    description: User successfully logged out
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 'Successfully logged out'
   '400':
-    description: 'Invalid session ID'
+    description: Invalid session ID
     content:
       application/json:
         schema:
