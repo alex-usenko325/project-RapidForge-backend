@@ -38,38 +38,44 @@ paths:
   /auth/register:
     post:
       $ref: ../swagger/paths/auth/register.yaml
-  /auth/login:
+  /auth/verifycate:
     post:
-      $ref: ../swagger/paths/auth/login.yaml
+      $ref: ../swagger/paths/auth/verifycate/request.yaml
+  /auth/verifycate/{token}:
+    get:
+      $ref: ../swagger/paths/auth/verifycate/{token}/verify.yaml
   /auth/get-oauth-utl:
     get:
       $ref: ../swagger/paths/auth/get-oauth-url.yaml
   /auth/confirm-oauth:
     post:
       $ref: ../swagger/paths/auth/confirm-oauth.yaml
-  /auth/verifycate/{token}:
-    get:
-      $ref: ../swagger/paths/auth/verifycate/{token}/verify.yaml
-  /auth/verifycate:
+  /auth/login:
     post:
-      $ref: ../swagger/paths/auth/verifycate/request.yaml
+      $ref: ../swagger/paths/auth/login.yaml
   /auth/logout:
     post:
       $ref: ../swagger/paths/auth/logout.yaml
   /auth/refresh:
     $ref: ../swagger/paths/auth/refresh.yaml
-  /auth/reset-pwd:
-    post:
-      $ref: ../swagger/paths/auth/reset-pwd.yaml
-  /auth/send-reset-email:
-    post:
-      $ref: ../swagger/paths/auth/requestEmailVerification.yaml
   /auth/send-reset-password-email:
     post:
       $ref: ../swagger/paths/auth/send-reset-pwd-email.yaml
   /auth/reset-password:
     post:
       $ref: ../swagger/paths/auth/reset-password.yaml
+  /user/usersCount:
+    get:
+      $ref: ../swagger/paths/user/get.yaml
+  /user/update/{id}:
+    patch:
+      $ref: ../swagger/paths/user/{id}/user_update.yaml
+  /user/avatar/{id}:
+    patch:
+      $ref: ../swagger/paths/user/{id}/user_avatar.yaml
+  /user/currentUser:
+    get:
+      $ref: ../swagger/paths/user/getUser.yaml
   /water:
     post:
       $ref: ../swagger/paths/water/post.yaml
@@ -84,18 +90,7 @@ paths:
   /water/month:
     get:
       $ref: ../swagger/paths/water/month.yaml
-  /user/usersCount:
-    get:
-      $ref: ../swagger/paths/user/get.yaml
-  /user/update/{id}:
-    patch:
-      $ref: ../swagger/paths/user/{id}/user_update.yaml
-  /user/avatar/{id}:
-    patch:
-      $ref: ../swagger/paths/user/{id}/user_avatar.yaml
-  /user/currentUser:
-    get:
-      $ref: ../swagger/paths/user/getUser.yaml
+
 components:
   securitySchemes:
     bearerAuth:
