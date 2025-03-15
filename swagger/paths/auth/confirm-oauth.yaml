@@ -1,10 +1,9 @@
 tags:
   - Auth
-summary: Login/Signup with Google OAuth
+summary: Signin/Signup with Google
 operationId: loginWithGoogle
 description: Logs in or signs up a user using Google OAuth.
-security:
-  - bearerAuth: []
+security: []
 requestBody:
   description: Google OAuth code
   required: true
@@ -46,6 +45,6 @@ responses:
                   type: string
                   description: Access token for the user.
   '401':
-    $ref: '../../components/responses/401-auth.yaml'
+    $ref: '../../components/responses/401.yaml'
   '500':
     $ref: '../../components/responses/500.yaml'

@@ -6,20 +6,7 @@ post:
   description: "Refresh the user's access token using a valid refresh token."
   security:
     - bearerAuth: []
-  requestBody:
-    description: Refresh token
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          required:
-            - refreshToken
-          properties:
-            refreshToken:
-              type: string
-              description: Refresh token received during login.
-              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+  parameters: []
   responses:
     '200':
       description: 'Successfully refreshed a session!'
@@ -27,6 +14,10 @@ post:
         application/json:
           schema:
             type: object
+            required:
+              - status
+              - message
+              - data
             properties:
               status:
                 type: integer
@@ -41,6 +32,8 @@ post:
                     type: string
                     description: 'Newly issued access token'
                     example: 'newRandomBase64AccessToken=='
+    '400':
+      $ref: ../../components/responses/400.yaml
     '401':
       $ref: ../../components/responses/401.yaml
     '500':
