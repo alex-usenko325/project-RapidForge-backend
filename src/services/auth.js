@@ -34,19 +34,34 @@ const createSession = async (userId) => {
 
   return session;
 };
-
 export const registerUser = async (payload) => {
   const email = payload.email.toLowerCase(); // Перевести email в нижній регістр
   const user = await UsersCollection.findOne({ email });
-  if (user) throw createHttpError(409, 'Email in use');
+
+  // Якщо користувач існує
+  if (user) {
+    // Якщо користувач не верифікований
+    if (user.isVerified) {
+      // Якщо користувач не верифікований, кидаємо помилку 409
+      throw createHttpError(409, 'Email is already in use, but not verified');
+    } else {
+      // Якщо користувач верифікований, кидаємо помилку 403
+      throw createHttpError(403, 'Email is already in use');
+    }
+  }
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-  return await UsersCollection.create({
+  const newUser = await UsersCollection.create({
     ...payload,
-    email, // Обов'язково записуємо email в нижньому регістрі
+    email, // Обов’язково записуємо email в нижньому регістрі
     password: encryptedPassword,
   });
+
+  // Створюємо сесію і отримуємо токени
+  const { accessToken, refreshToken } = await createSession(newUser._id);
+
+  return { user: newUser, accessToken, refreshToken };
 };
 
 export const requestEmailVerificationToken = async (email) => {
@@ -79,7 +94,7 @@ export const requestEmailVerificationToken = async (email) => {
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${getEnvVar('APP_DOMAIN')}/signin?token=${verificationToken}`,
+    link: `${getEnvVar('APP_DOMAIN')}/tracker?token=${verificationToken}`,
   });
 
   await sendEmail({
@@ -126,17 +141,21 @@ export const loginUser = async (payload) => {
   const user = await UsersCollection.findOne({ email });
   if (!user) throw createHttpError(404, 'User not found');
 
-  // Перевірка, чи email верифікований
-  if (!user.isVerified) {
-    throw createHttpError(401, 'Email not verified');
-  }
-
   const isEqual = await bcrypt.compare(payload.password, user.password);
   if (!isEqual) throw createHttpError(401, 'Incorrect password');
 
+  // Видаляємо старі сесії для цього користувача
   await SessionsCollection.deleteMany({ userId: user._id });
 
-  return await createSession(user._id);
+  // Створюємо нову сесію
+  const { accessToken, refreshToken } = await createSession(user._id);
+
+  return {
+    user,
+    accessToken,
+    refreshToken,
+    isVerified: user.isVerified,
+  };
 };
 
 export const logoutUser = async (sessionId) => {

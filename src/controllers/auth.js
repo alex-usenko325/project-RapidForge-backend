@@ -28,12 +28,19 @@ const setupSession = (res, session) => {
 };
 
 export const registerUserController = async (req, res) => {
-  const user = await registerUser(req.body);
+  const { user, accessToken } = await registerUser(req.body);
+
+  // Лог перед відправкою відповіді
+  console.log('User:', user);
+  console.log('Access Token:', accessToken);
 
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
-    data: user,
+    data: {
+      user,
+      accessToken, // Це значення має бути в JSON відповіді
+    },
   });
 };
 
@@ -78,14 +85,19 @@ export const verifyEmailController = async (req, res) => {
 };
 
 export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
+  const session = await loginUser(req.body); // Отримуємо сесію
+  const user = session.user; // Отримуємо користувача з сесії
+  const isVerified = user.isVerified; // Отримуємо статус верифікації з користувача
 
-setupSession(res, session);
+  setupSession(res, session);
 
   res.json({
     status: 200,
     message: 'Successfully logged in a user!',
-    data: { accessToken: session.accessToken },
+    data: {
+      accessToken: session.accessToken,
+      isVerified: isVerified,
+    },
   });
 };
 
@@ -99,8 +111,6 @@ export const logoutUserController = async (req, res) => {
 
   res.status(204).send();
 };
-
-
 
 export const refreshUserSessionController = async (req, res) => {
   const session = await refreshUsersSession({
