@@ -12,6 +12,7 @@ parameters:
     required: true
     description: The year for which to fetch water consumption data.
     schema:
+
       type: number
       example: '2025'
   - name: month
