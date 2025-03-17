@@ -15,4 +15,6 @@ content:
           type: string
           example: Email is not verified.
         data:
-          type: 'null'
+          oneOf:
+            - type: 'null'
+            - type: 'object'
