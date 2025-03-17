@@ -31,7 +31,7 @@ export const startServer = async () => {
       origin: [
         'http://localhost:5173',
         'http://localhost:5174',
-        'https://project-node-react-frontend.vercel.app',
+        'https://project-rapid-forge-frontend.vercel.app',
       ], // Дозволяє доступ з цих доменів
       credentials: true, // Дозволяє передавати cookies та інші приватні дані
     }),
