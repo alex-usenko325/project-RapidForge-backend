@@ -455,6 +455,9 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
           "404": {
             "$ref": "#/components/responses/404"
           },
@@ -654,7 +657,8 @@
                 "properties": {
                   "token": {
                     "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2QzODUxZGRlMTM2MWE5OTZjZmIwZmUiLCJlbWFpbCI6Imtyb2xpYXRrb29AZ21haWwuY29tIiwiaWF0IjoxNzQxOTY0OTAxLCJleHAiOjE3NDE5NjU4MDF9.m8_RfZmHECXGjw__gCtEVKhJ-vYhJiOp1NdyywXCKBM"
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2QzODUxZGRlMTM2MWE5OTZjZmIwZmUiLCJlbWFpbCI6Imtyb2xpYXRrb29AZ21haWwuY29tIiwiaWF0IjoxNzQxOTY0OTAxLCJleHAiOjE3NDE5NjU4MDF9.m8_RfZmHECXGjw__gCtEVKhJ-vYhJiOp1NdyywXCKBM",
+                    "description": "Token for reseting password"
                   },
                   "password": {
                     "type": "string",
@@ -671,7 +675,7 @@
         },
         "responses": {
           "200": {
-            "description": "Reset password email was successfully sent!",
+            "description": "Password was successfully reset!",
             "content": {
               "application/json": {
                 "schema": {
@@ -706,6 +710,38 @@
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "description": "Unauthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "jwt expired"
+                    },
+                    "data": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -1554,7 +1590,6 @@
                   "example": "UnauthorizedError"
                 },
                 "data": {
-                  "type": "object",
                   "oneOf": [
                     {
                       "type": "null"
@@ -1569,6 +1604,34 @@
                       "example": "Invalid or expired access token."
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 403
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email is not verified."
+                },
+                "data": {
+                  "type": "null"
                 }
               }
             }
@@ -1666,12 +1729,16 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Internal Server Error"
+                  "example": "Something went wrong"
                 },
                 "data": {
-                  "type": "object",
-                  "required": [
-                    "message"
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object"
+                    }
                   ],
                   "properties": {
                     "message": {

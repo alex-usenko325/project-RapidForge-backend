@@ -15,7 +15,6 @@ content:
           type: string
           example: UnauthorizedError
         data:
-          type: object
           oneOf:
             - type: 'null'
             - type: 'object'

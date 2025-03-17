@@ -128,7 +128,7 @@ export const loginUser = async (payload) => {
 
   // Перевірка, чи email верифікований
   if (!user.isVerified) {
-    throw createHttpError(401, 'Email not verified');
+    throw createHttpError(403, 'Email is not verified');
   }
 
   const isEqual = await bcrypt.compare(payload.password, user.password);
