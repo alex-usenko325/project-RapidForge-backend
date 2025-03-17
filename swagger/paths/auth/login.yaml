@@ -54,6 +54,8 @@ responses:
                   example: 'bseDlf/Chq0dMG6c6o194qTqA6KaFeMMt6lJZOhp'
   '400':
     $ref: ../../components/responses/400.yaml
+  '403':
+    $ref: ../../components/responses/403.yaml
   '404':
     $ref: ../../components/responses/404.yaml
   '500':

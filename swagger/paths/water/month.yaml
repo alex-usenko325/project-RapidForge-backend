@@ -12,16 +12,16 @@ parameters:
     required: true
     description: The year for which to fetch water consumption data.
     schema:
-      type: integer
-      example: 2025
+
+      type: number
+      example: '2025'
   - name: month
     in: query
     required: true
     description: The month for which to fetch water consumption data.
     schema:
-      type: integer
-      example: 03
-
+      type: number
+      example: '03'
 responses:
   '200':
     description: OK! - Everything worked as expected

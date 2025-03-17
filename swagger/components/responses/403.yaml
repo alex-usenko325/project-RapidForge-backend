@@ -1,4 +1,4 @@
-description: Unauthorized error
+description: Forbidden
 content:
   application/json:
     schema:
@@ -10,15 +10,11 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 403
         message:
           type: string
-          example: UnauthorizedError
+          example: Email is not verified.
         data:
           oneOf:
             - type: 'null'
             - type: 'object'
-          properties:
-            message:
-              type: string
-              example: 'Invalid or expired access token.'
