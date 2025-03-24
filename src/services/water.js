@@ -1,5 +1,12 @@
 import { waterCollection } from '../db/models/Water.js';
 import createHttpError from 'http-errors';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export const addWaterRecord = async ({ userId, date, time, volume }) => {
   const record = await waterCollection.create({ userId, date, time, volume });
@@ -21,32 +28,9 @@ export const updateWaterRecord = async (userId, recordId, updateData) => {
 };
 
 export const getWaterToday = async (userId) => {
-  const nowUTC = new Date();
-  const startDay = new Date(
-    Date.UTC(
-      nowUTC.getUTCFullYear(),
-      nowUTC.getUTCMonth(),
-      nowUTC.getUTCDate(),
-      0,
-      0,
-      0,
-    ),
-  )
-    .toISOString()
-    .split('T')[0];
-
-  const endDay = new Date(
-    Date.UTC(
-      nowUTC.getUTCFullYear(),
-      nowUTC.getUTCMonth(),
-      nowUTC.getUTCDate(),
-      23,
-      59,
-      59,
-    ),
-  )
-    .toISOString()
-    .split('T')[0];
+  const now = dayjs().tz(userTimezone);
+  const startDay = now.startOf('day').format('YYYY-MM-DD');
+  const endDay = now.endOf('day').format('YYYY-MM-DD');
 
   return await waterCollection.find({
     userId,
