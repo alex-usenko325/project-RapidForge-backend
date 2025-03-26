@@ -1,13 +1,5 @@
 import { waterCollection } from '../db/models/Water.js';
 import createHttpError from 'http-errors';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc.js';
-import timezone from 'dayjs/plugin/timezone.js';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
 export const addWaterRecord = async ({ userId, date, time, volume }) => {
   const record = await waterCollection.create({ userId, date, time, volume });
   return record;
@@ -27,27 +19,19 @@ export const updateWaterRecord = async (userId, recordId, updateData) => {
   return updatedRecord;
 };
 
-export const getWaterToday = async (userId) => {
-  const now = dayjs().tz(userTimezone);
-  const startDay = now.startOf('day').format('YYYY-MM-DD');
-  const endDay = now.endOf('day').format('YYYY-MM-DD');
-
+export const getWaterToday = async (userId, date) => {
   return await waterCollection.find({
     userId,
-    date: { $gte: startDay, $lte: endDay },
+    date: date,
   });
 };
 
 export const getWaterForMonth = async (userId, year, month) => {
-  const startMonth = new Date(
-    Date.UTC(year, month - 1, 1, 0, 0, 0),
-  ).toISOString();
-
-  const endMonth = new Date(Date.UTC(year, month, 0, 23, 59, 59)).toISOString();
-
+  const mm = month.toString().padStart(2, '0');
+  const monthPrefix = `${year}-${mm}`;
   return await waterCollection.find({
     userId,
-    date: { $gte: startMonth, $lte: endMonth },
+    date: { $regex: `^${monthPrefix}` },
   });
 };
 
