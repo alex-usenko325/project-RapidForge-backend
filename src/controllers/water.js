@@ -39,11 +39,12 @@ export const updateWaterRecordController = async (req, res) => {
 };
 
 export const getWaterTodayController = async (req, res) => {
+  const { date } = req.query;
   const userId = req.user._id;
   if (!userId) {
     throw createHttpError(401, 'Unauthorized: User not found');
   }
-  const waterData = await getWaterToday(userId);
+  const waterData = await getWaterToday(userId, date);
 
   if (!waterData || waterData.length === 0) {
     return res.json({
